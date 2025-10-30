@@ -1,20 +1,61 @@
 "use client";
 
-// Pour les animations avec React
 import { motion } from "framer-motion"; 
-// Hook Next.js pour naviguer entre les pages
 import { useRouter } from "next/navigation"; 
-// Composants UI
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
-// Fonction utilitaire pour récupérer l'historique stocké
 import { getHistory } from "@/app/utils/storage";
-// Icônes
-import { Home, Eye, Calendar, ArrowLeft } from "lucide-react";
+import { Eye, Calendar, ArrowLeft, User, Star } from "lucide-react";
+import { useEffect, useState } from "react";
+
+// Interface pour typer les éléments d'historique
+interface HistoryItem {
+  id: string;
+  sessionId?: string;
+  completedAt: string;
+  responses: Record<string, any>;
+  totalScore?: number;
+  progress?: {
+    currentStep: number;
+    totalSteps: number;
+  };
+}
 
 const History = () => {
-  const router = useRouter(); // Hook Next.js
-  const history = getHistory(); // Récupère l'historique
+  const router = useRouter();
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  // Charger l'historique côté client seulement
+  useEffect(() => {
+    const loadHistory = () => {
+      try {
+        const historyData = getHistory();
+        // Convert Date to string for HistoryItem interface
+        const convertedHistory = historyData.map(item => ({
+          ...item,
+          completedAt: item.completedAt instanceof Date ? item.completedAt.toISOString() : item.completedAt
+        }));
+        setHistory(convertedHistory);
+      } catch (error) {
+        console.error("Erreur chargement historique:", error);
+      }
+    };
+
+    loadHistory();
+  }, []);
+
+  // Fonction pour extraire les informations des réponses
+  const getSessionInfo = (item: HistoryItem) => {
+    const responses = item.responses || {};
+    
+    // Utiliser les bonnes clés de questionnaire (q1, q2, q3)
+    const name = responses.q1?.answer || "Anonyme";
+    const experience = responses.q2?.answer || "Non spécifié";
+    const specialization = responses.q3?.answer || "Non spécifié";
+    const totalScore = item.totalScore || 0;
+
+    return { name, experience, specialization, totalScore };
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background py-8 px-4">
@@ -55,60 +96,83 @@ const History = () => {
             </Card>
           ) : (
             <div className="space-y-4">
-              {history.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="p-6 hover:shadow-lg transition-shadow">
-                    <div className="flex justify-between items-center">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <Calendar className="w-5 h-5 text-primary" />
+              {history.map((item, index) => {
+                const sessionInfo = getSessionInfo(item);
+                
+                return (
+                  <motion.div
+                    key={item.id} // ✅ MAINTENANT GARANTI UNIQUE par le storage
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <Card className="p-6 hover:shadow-lg transition-shadow">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                              <Calendar className="w-5 h-5 text-primary" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold">
+                                Évaluation #{history.length - index}
+                              </h3>
+                              <p className="text-sm text-muted-foreground">
+                                {item.completedAt ? 
+                                  new Date(item.completedAt).toLocaleDateString("fr-FR", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                  }) : 
+                                  "Date non disponible"
+                                }
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-lg font-semibold">
-                              Évaluation #{history.length - index}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(item.completedAt).toLocaleDateString("fr-FR", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
+
+                          {/* Informations de la session */}
+                          <div className="ml-13 mt-3 space-y-2">
+                            <div className="flex flex-wrap gap-2">
+                              <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium flex items-center gap-1">
+                                <User className="w-3 h-3" />
+                                {sessionInfo.name}
+                              </span>
+                              
+                              <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-sm font-medium">
+                                {sessionInfo.experience}
+                              </span>
+                              
+                              <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-sm font-medium">
+                                {sessionInfo.specialization}
+                              </span>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <Star className="w-4 h-4 text-yellow-500" />
+                                Score: {sessionInfo.totalScore} pts
+                              </span>
+                              <span>
+                                {Object.keys(item.responses || {}).length} questions répondues
+                              </span>
+                            </div>
                           </div>
                         </div>
 
-                        <div className="ml-13 mt-3 flex flex-wrap gap-2">
-                          <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                            {item.responses.role}
-                          </span>
-                          <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
-                            {item.responses.experience} ans
-                          </span>
-                          {item.responses.work_style && (
-                            <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-500 text-sm font-medium">
-                              {item.responses.work_style}
-                            </span>
-                          )}
-                        </div>
+                        <Button
+                          onClick={() => router.push(`/resultats/${item.sessionId || item.id}`)}
+                          className="ml-4"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Voir les résultats
+                        </Button>
                       </div>
-
-                      <Button
-                        onClick={() => router.push(`/results/${item.id}`)}
-                        className="ml-4"
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        Voir les résultats
-                      </Button>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
 

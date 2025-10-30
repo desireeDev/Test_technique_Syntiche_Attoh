@@ -1,24 +1,24 @@
 import { QuestionnaireResponse } from "@/app/types/questionnaire";
-
+// Définition des interfaces pour les données des graphiques
 export interface ChartData {
   name: string;
   value: number;
   color?: string;
 }
-
+// Données pour le radar chart
 export interface RadarData {
   category: string;
   score: number;
   fullMark: number;
 }
-
+// Données pour les scores par catégorie
 export interface CategoryScore {
   name: string;
   score: number;
   maxScore: number;
   percentage: number;
 }
-
+// Fonction pour générer les données des graphiques à partir des réponses du questionnaire
 const getExperienceScore = (experience: string): number => {
   const scores: Record<string, number> = {
     junior: 1,
@@ -28,7 +28,7 @@ const getExperienceScore = (experience: string): number => {
   };
   return scores[experience] || 0;
 };
-
+// Fonction pour obtenir le score basé sur la spécialisation
 const getSpecializationScore = (spec: string): number => {
   const scores: Record<string, number> = {
     frontend: 10,
@@ -39,19 +39,16 @@ const getSpecializationScore = (spec: string): number => {
   };
   return scores[spec] || 0;
 };
-
+// Fonction principale pour générer les données des graphiques
 export const generateChartData = (responses: QuestionnaireResponse) => {
   const specialization = responses.q3 as string;
   const experience = responses.q2 as string;
   const frontendFrameworks = (responses.q4 || []) as string[];
-  const metaFramework = responses.q5 as string;
   const stylingTools = (responses.q6 || []) as string[];
   const backendLanguages = (responses.q7 || []) as string[];
   const databases = (responses.q8 || []) as string[];
-  const apiPreference = responses.q9 as string;
   const devTools = (responses.q10 || []) as string[];
   const testingPractices = (responses.q11 || []) as string[];
-  const typescriptApproach = responses.q12 as string;
   const interests = (responses.q13 || []) as string[];
   const projectType = responses.q14 as string;
 

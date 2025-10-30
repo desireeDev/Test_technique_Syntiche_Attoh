@@ -1,4 +1,4 @@
-// On importe MongoClient depuis la librairie MongoDB pour se connecter à la base de données
+// app/lib/mongodb.ts
 import { MongoClient } from 'mongodb';
 
 // On récupère l'URI (adresse de connexion) de la base de données depuis les variables d'environnement
@@ -12,6 +12,11 @@ let clientPromise: Promise<MongoClient>;
 // Vérification que l'URI existe, sinon on stoppe et on affiche une erreur
 if (!process.env.MONGODB_URI) {
   throw new Error('Ajoutez MONGODB_URI dans .env.local'); // Message pour rappeler d'ajouter l'URI
+}
+
+// Déclaration du type pour l'objet global avec notre propriété MongoDB
+declare global {
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
 // Gestion de la connexion en fonction de l'environnement (dev ou prod)
