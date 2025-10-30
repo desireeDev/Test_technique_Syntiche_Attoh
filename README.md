@@ -76,6 +76,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 ### Frontend
 - **Next.js 14** - Framework React avec App Router, SSR, optimisation automatique
+- React 18 avec les hooks
 - **TypeScript** - Typage statique avancé pour la maintenabilité
 - **Tailwind CSS** - Framework CSS utilitaire, design system cohérent
 - **Framer Motion** - Bibliothèque d'animations 60fps
@@ -154,7 +155,7 @@ npm run dev
 ````
 
 ###🗄️ Configuration MongoDB
-
+````
 🐳 Configuration Docker Compose
 Le projet utilise une configuration Docker Compose complète incluant :
 
@@ -165,6 +166,7 @@ Script d'initialisation avec questions d'exemple
 Volume persistant pour les données
 
 Les données de test incluent 6 questions réparties sur 5 étapes avec différents types de questions (choix multiple, unique, échelle, texte).
+````
 
 📁 Structure du Projet
 
@@ -194,6 +196,7 @@ TEST_TECHNIQUE/
 ````
 
 🐛 État du Projet & Solutions
+````
 🔴 Problème Critique : Affichage des Résultats
 Localisation : /src/app/results/page.tsx et composant ResultsChart
 
@@ -210,7 +213,8 @@ Flux de données interrompu entre le questionnaire et les résultats
 Problème de sérialisation des props vers le composant graphique
 
 Solution en Cours :
-````
+
+
 // Debug du flux de données et correction du fichier page dans result.
 ````
 
@@ -249,5 +253,6 @@ Tests unitaires - Couverture de tests
 Tableau de bord admin - Analytics avancés
 
 Internationalisation - Support multi-langues
+
 
 
