@@ -195,23 +195,6 @@ TEST_TECHNIQUE/
 
 ## 🐛 État du Projet & Solutions
 
-### 🔴 Problème Critique : Affichage des graphes des resultats et mise à jour du score)
-
-**Localisation :** `/src/app/results/page.tsx` et composant `ResultsChart`
-
-**Symptôme :**
-- Les graphiques Recharts ne s'affichent pas
-- Les données sont collectées mais non visualisées
-
-**Cause Identifiée :**
-- Flux de données interrompu entre le questionnaire et les résultats
-- Problème de sérialisation des props vers le composant graphique
-
-**Solution en Cours :**
-```typescript
-// Debug du flux de données et correction du fichier page dans result.
-```
-
 ### 🟡 Autres Problèmes Majeurs à Résoudre
 
 
@@ -246,6 +229,7 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
 
 
