@@ -206,9 +206,9 @@ TEST_TECHNIQUE/
 // Debug du flux de données et correction du fichier page dans result.
 ```
 
-### 🟡 Autres Problèmes Mineurs à Résoudre
+### 🟡 Autres Problèmes Majeurs à Résoudre
 
-- **Dossiers dupliqués** : `resultats/` et `results/`
+
 - **Export PDF non intégré** : Utilitaires créés mais non connectés à l'UI
 
 ### ✅ Parties Complètement Fonctionnelles
@@ -240,3 +240,4 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
