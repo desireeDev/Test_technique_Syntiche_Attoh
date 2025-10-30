@@ -1,6 +1,8 @@
 
 
-# Questionnaire Next.js – Bleu & Blanc
+# 🚀 DevProfile - Questionnaire Développeur
+
+Une application Next.js moderne et élégante pour évaluer votre profil de développeur à travers un questionnaire interactif.
 
 ## 1. Instructions d'installation et de lancement
 
@@ -16,8 +18,8 @@ React Router
 1. Cloner le dépôt :
 
 ```bash
-git clone <URL_DU_DEPOT>
-cd my-next-questionnaire
+git clone <https://github.com/desireeDev/TEST-TECHNIQUE---D-VELOPPEUR-REACT-NODE.JS.git>
+cd test
 ```
 
 2. Installer les dépendances :
@@ -70,36 +72,40 @@ http://localhost:3000
 * ✅ Barre de progression dynamique
 * ✅ Validation des champs obligatoires
 * ✅ Sauvegarde automatique des réponses
-* ✅ Page de résultats avec graphiques (Radar, Bar)
-* ✅ Design responsive violet/blanc
+* ✅ Page de résultats avec graphiques (Problème d'affichage)
+* ✅ Design responsive bleu/blanc
 * ✅ Interface de connexion utilisateur (en cours)
 
 ---
 
 ## 4. Bugs rencontrés / erreurs
 
-### Graphiques et affichage
+### 🚨 **BUG CRITIQUE**
+* ❌ **Page résultats ne s'affiche pas** - Redirection après questionnaire mais page blanche ou erreur
+* ❌ **Endpoint API `/api/responses/${id}` non fonctionnel** - Structure d'URL incompatible
 
+### **Graphiques et affichage**
 * ⚠️ Graphiques parfois mal alignés sur mobile ou tablettes
 * ⚠️ Texte des résultats dépasse certaines cartes
-* ⚠️ Couleurs des graphiques parfois peu lisibles selon l’écran
+* ⚠️ Couleurs des graphiques parfois peu lisibles selon l'écran
 
-### Sauvegarde et récupération
-
+### **Sauvegarde et récupération**
 * ⚠️ Sauvegarde locale parfois ne se met pas à jour immédiatement
 * ⚠️ Anciennes réponses peuvent persister après un nouvel envoi
+* ⚠️ Données de session pas toujours récupérées depuis MongoDB
 
-### Interface et navigation
-
-* ⚠️ Animation de transition entre étapes peut provoquer des “sauts” sur certaines résolutions
+### **Interface et navigation**
+* ⚠️ Animation de transition entre étapes peut provoquer des "sauts" sur certaines résolutions
 * ⚠️ Interface de connexion incomplète (authentification non implémentée)
 
-### Déploiement et dépendances
-
-* ⚠️ Tentative d’utilisation de classes Tailwind comme `max-w-7xl` provoque des erreurs si Tailwind n’est pas configuré
+### **Déploiement et dépendances**
+* ⚠️ Tentative d'utilisation de classes Tailwind comme `max-w-7xl` provoque des erreurs si Tailwind n'est pas configuré
 * ⚠️ Certains composants nécessitent encore un style CSS ajusté pour correspondre au thème violet/blanc
 
----
+**Priorité :** 
+1. 🚨 Résoudre le bug critique de la page résultats
+2. 🔧 Corriger les endpoints API
+3. 🎨 Ajuster l'interface et le responsive
 
 ## 5. Captures d’écran de l’application
 
@@ -157,6 +163,7 @@ my-next-questionnaire/
 ├─ package.json
 └─ README.md
 ```
+
 
 
 
