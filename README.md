@@ -59,11 +59,11 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 **Statut :** 🔴 **En Cours de Résolution**
 
-**Description :** Le composant de graphiques des résultats ne s'affiche pas correctement. Les données sont collectées mais la visualisation graphique rencontre un problème d'affichage.
+**Description :** Les graphiques s'affichent maintenant correctement, mais les scores et pourcentages sont incorrects (toujours à 0 ou valeurs identiques). Le calcul des données dans chartData.ts ne reflète pas les réponses réelles des utilisateurs.
 
-**Impact :** Les utilisateurs peuvent compléter le questionnaire mais ne voient pas les graphiques finaux, ni la liste la page résultats car elle est introuvable.
+**Impact :** Les utilisateurs voient les graphiques mais avec des données non représentatives de leurs réponses.
 
-**Solution en cours :** Modification du fichier Page.tsx dans le dossier results en cours.
+**Solution en cours :** Correction des algorithmes de calcul dans le fichier chartData.ts pour générer des scores réalistes basés sur les réponses du questionnaire.
 
 ### ⭐ Fonctionnalités Bonus
 
@@ -112,6 +112,9 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 ### Page de résultat - Bug en cours de réglage
 
 <img width="1911" height="991" alt="Rssults" src="https://github.com/user-attachments/assets/f4592cfd-027d-4014-af16-d9bf36d6d2b1" />
+
+<img width="1898" height="923" alt="Profil" src="https://github.com/user-attachments/assets/bdfadeb9-e888-4f6a-b08f-f003f24fb4db" />
+<img width="1727" height="617" alt="Specialiation" src="https://github.com/user-attachments/assets/3fb1bba3-3b2c-4542-88ba-ac1ae0354437" />
 
 
 ### Historique des questionnaires
@@ -243,5 +246,6 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
 
