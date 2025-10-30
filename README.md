@@ -5,7 +5,8 @@
 ## 1. Instructions d'installation et de lancement
 
 ### Prérequis
-
+Next.js (14)
+React Router
 * Node.js >= 18
 * npm ou yarn
 * Docker (pour MongoDB)
@@ -116,8 +117,9 @@ http://localhost:3000
 <img width="1915" height="988" alt="Serveur" src="https://github.com/user-attachments/assets/b78f018b-585d-4418-8920-0d350bc3bc3b" />
 
 
+<img width="1703" height="1080" alt="Pref" src="https://github.com/user-attachments/assets/7843de38-067c-4c41-8ef5-daa23a8cb4e1" />
 
-### Écran résultats
+<img width="1873" height="952" alt="historiquee" src="https://github.com/user-attachments/assets/607d5f62-3b32-412b-9e0f-57d1d65d5dd5" />
 
 
 ---
@@ -130,7 +132,7 @@ http://localhost:3000
 * [x] Barre de progression
 * [x] Validation des champs requis
 * [x] Sauvegarde automatique des réponses
-* [x] Page de résultats avec graphique
+* [x] Page de résultats avec graphique (probleme d'affichage car page introuvable)
 * [x] Design responsive
 * [ ] Correction des bugs graphiques
 * [ ] Finaliser interface de connexion
@@ -147,15 +149,14 @@ my-next-questionnaire/
 │  ├─ components/
 │  ├─ questionnaire/
 │  └─ results/
-├─ data/
-│  └─ questions.json
-├─ public/
-│  └─ screenshots/
+├─
+├─ 
 ├─ styles/
 │  └─ globals.css
 ├─ docker-compose.yml
 ├─ package.json
 └─ README.md
 ```
+
 
 
