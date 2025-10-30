@@ -4,6 +4,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type ToastType = {
+  variant: string;
   id: string;
   title?: string;
   description?: string;
@@ -36,7 +37,10 @@ function dispatch(action: { type: "ADD" | "REMOVE"; toast?: ToastType; toastId?:
 
 export function toast({ title, description }: { title?: string; description?: string }) {
   const id = Date.now().toString();
-  dispatch({ type: "ADD", toast: { id, title, description, open: true } });
+  dispatch({ type: "ADD", toast: {
+      id, title, description, open: true,
+      variant: ""
+  } });
 
   setTimeout(() => dispatch({ type: "REMOVE", toastId: id }), TOAST_REMOVE_DELAY);
 }

@@ -1,17 +1,14 @@
-  "use client";
-  
-  // Composant RadioGroupCard réutilisable
+"use client";
 import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
 import { Label } from "@/app/components/ui/label";
 import { cn } from "@/app/lib/utils";
-// Utilitaire pour concaténer des classes conditionnellement
-// Définition d'une option individuelle du groupe de radio
+
 interface Option {
   id?: string;
   label: string;
   value: string;
 }
-// Props attendues par le composant RadioGroupCard
+
 interface RadioGroupCardProps {
   options: Option[];
   value: string;
@@ -37,23 +34,23 @@ export const RadioGroupCard = ({
           <Label
             htmlFor={option.id || option.value}
             className={cn(
-              "flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all",
+              "checkbox-card flex items-center justify-between p-4 cursor-pointer transition-all", // Classe CSS globale
               "hover:border-primary/50 hover:shadow-md",
-              "peer-checked:border-primary peer-checked:bg-primary/5",
-              "peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2"
+              "peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-lg",
+              "peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2"
             )}
           >
-            <span className="font-medium">{option.label}</span>
+            <span className="font-medium text-card-foreground">{option.label}</span>
             <div
               className={cn(
-                "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
+                "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200",
                 value === option.value
-                  ? "border-primary bg-primary"
-                  : "border-muted-foreground"
+                  ? "border-primary bg-primary shadow-inner"
+                  : "border-border bg-card"
               )}
             >
               {value === option.value && (
-                <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                <div className="w-2.5 h-2.5 rounded-full bg-primary-foreground" />
               )}
             </div>
           </Label>

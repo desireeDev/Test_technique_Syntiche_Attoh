@@ -1,21 +1,21 @@
 "use client";
-import { Checkbox } from "@/app/components/ui/checkbox"; // Composant Checkbox réutilisable
-import { Label } from "@/app/components/ui/label"; // Composant Label réutilisable
-import { cn } from "@/app/lib/utils"; // Utilitaire pour concaténer des classes conditionnellement
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { Label } from "@/app/components/ui/label";
+import { cn } from "@/app/lib/utils";
 
 // Définition d'une option individuelle du groupe de checkbox
 interface Option {
-  id?: string; // ID optionnel, utile pour lier le label à la checkbox
-  label: string; // Texte affiché pour l'option
-  value: string; // Valeur unique de l'option
+  id?: string;
+  label: string;
+  value: string;
 }
 
 // Props attendues par le composant CheckboxGroupCard
 interface CheckboxGroupCardProps {
-  options: Option[]; // Liste des options disponibles
-  values: string[]; // Valeurs actuellement sélectionnées
-  onChange: (values: string[]) => void; // Callback lorsque la sélection change
-  className?: string; // Classes CSS additionnelles pour le conteneur
+  options: Option[];
+  values: string[];
+  onChange: (values: string[]) => void;
+  className?: string;
 }
 
 /**
@@ -34,10 +34,8 @@ export const CheckboxGroupCard = ({
    */
   const handleCheck = (optionValue: string, checked: boolean) => {
     if (checked) {
-      // Ajoute la valeur si elle est cochée
       onChange([...values, optionValue]);
     } else {
-      // Retire la valeur si elle est décochée
       onChange(values.filter((v) => v !== optionValue));
     }
   };
@@ -45,45 +43,45 @@ export const CheckboxGroupCard = ({
   return (
     <div className={cn("space-y-3", className)}>
       {options.map((option) => {
-        const isChecked = values.includes(option.value); // Vérifie si l'option est sélectionnée
+        const isChecked = values.includes(option.value);
         return (
           <div key={option.id || option.value} className="relative">
             {/* Checkbox invisible mais fonctionnelle */}
             <Checkbox
-              id={option.id || option.value} // Associe l'ID au label
-              checked={isChecked} // Etat coché/décoché
+              id={option.id || option.value}
+              checked={isChecked}
               onCheckedChange={(checked) =>
-                handleCheck(option.value, checked as boolean) // Met à jour la sélection
+                handleCheck(option.value, checked as boolean)
               }
-              className="peer sr-only" // Masque visuellement la checkbox mais permet le focus et le style via peer
+              className="peer sr-only"
             />
 
-            {/* Label stylisé comme une carte cliquable */}
+            {/* Label stylisé comme une carte cliquable avec classes CSS globales */}
             <Label
               htmlFor={option.id || option.value}
               className={cn(
-                "flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all", // Base style
-                "hover:border-primary/50 hover:shadow-md", // Style au survol
-                "peer-checked:border-primary peer-checked:bg-primary/5", // Style lorsque la checkbox est cochée
-                "peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2" // Style au focus pour accessibilité
+                "checkbox-card flex items-center justify-between p-4 cursor-pointer transition-all", // Utilise la classe CSS globale
+                "hover:border-primary/50 hover:shadow-md",
+                "peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-lg", // Amélioré avec shadow-lg
+                "peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2"
               )}
             >
               {/* Texte de l'option */}
-              <span className="font-medium">{option.label}</span>
+              <span className="font-medium text-card-foreground">{option.label}</span>
 
-              {/* Case à cocher visuelle */}
+              {/* Case à cocher visuelle améliorée */}
               <div
                 className={cn(
-                  "w-5 h-5 rounded border-2 flex items-center justify-center transition-all",
+                  "w-6 h-6 rounded border-2 flex items-center justify-center transition-all duration-200",
                   isChecked
-                    ? "border-primary bg-primary" // Case remplie si cochée
-                    : "border-muted-foreground" // Case vide si décochée
+                    ? "border-primary bg-primary shadow-inner" // Amélioré avec shadow
+                    : "border-border bg-card" // Utilise les variables CSS globales
                 )}
               >
                 {isChecked && (
-                  // Icône checkmark affichée si cochée
+                  // Icône checkmark améliorée
                   <svg
-                    className="w-3 h-3 text-white"
+                    className="w-3.5 h-3.5 text-primary-foreground"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"

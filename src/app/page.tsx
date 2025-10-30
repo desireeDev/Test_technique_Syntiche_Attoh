@@ -4,22 +4,22 @@ import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { motion } from "framer-motion";
 import { Code2, Sparkles, TrendingUp, History, LogIn } from "lucide-react";
-import { useRouter } from "next/navigation"; // ✅ Next.js App Router
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-  const router = useRouter(); // Hook Next.js pour la navigation
+  const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background">
+    <div className="min-h-screen bg-background">
       {/* Header avec le bouton de connexion */}
-      <div className="border-b border-border/40 bg-background/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm">
+        <div className="container flex justify-between items-center p-4">
           <div className="flex items-center gap-2">
             <Code2 className="w-6 h-6 text-primary" />
             <span className="font-semibold text-lg">DevProfile</span>
           </div>
 
-          <Button variant="outline" onClick={() => router.push("/auth")}>
+          <Button variant="outline" onClick={() => router.push("/auth")} className="button button-outline">
             <LogIn className="w-4 h-4 mr-2" />
             Se connecter
           </Button>
@@ -27,7 +27,7 @@ const Home = () => {
       </div>
 
       {/* Section principale */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container p-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -41,7 +41,7 @@ const Home = () => {
             </span>
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-600 to-primary bg-clip-text text-transparent">
+          <h1 className="h1 mb-6 text-center">
             Découvrez votre profil développeur
           </h1>
           
@@ -54,7 +54,7 @@ const Home = () => {
             <Button
               size="lg"
               onClick={() => router.push("/questionnaire")}
-              className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
+              className="button button-primary text-lg px-8 py-6"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Commencer le questionnaire
@@ -64,10 +64,10 @@ const Home = () => {
               size="lg"
               variant="outline"
               onClick={() => router.push("/history")}
-              className="text-lg px-8 py-6"
+              className="button button-outline text-lg px-8 py-6"
             >
               <History className="w-5 h-5 mr-2" />
-              Voir l’historique
+              Voir ton historique
             </Button>
           </div>
         </motion.div>
@@ -76,9 +76,9 @@ const Home = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto"
+          className="grid grid-3 gap-6 max-w-5xl mx-auto"
         >
-          <Card className="p-6 hover:shadow-lg transition-shadow">
+          <Card className="card fade-in">
             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
               <Code2 className="w-6 h-6 text-primary" />
             </div>
@@ -88,7 +88,7 @@ const Home = () => {
             </p>
           </Card>
 
-          <Card className="p-6 hover:shadow-lg transition-shadow">
+          <Card className="card fade-in">
             <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6 text-accent" />
             </div>
@@ -98,7 +98,7 @@ const Home = () => {
             </p>
           </Card>
 
-          <Card className="p-6 hover:shadow-lg transition-shadow">
+          <Card className="card fade-in">
             <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4">
               <History className="w-6 h-6 text-purple-500" />
             </div>

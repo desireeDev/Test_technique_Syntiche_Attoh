@@ -58,12 +58,87 @@ export async function POST(request: Request) {
     // 3. On récupère les valeurs du body (après validation)
     const { sessionId, responses, progress, totalScore } = body;
 
-    // Ici tu pourrais continuer pour sauvegarder dans MongoDB ou faire d'autres traitements
+    // 4. Connexion à MongoDB
+    const client = await clientPromise;
+    const db = client.db(); // Utilise la base de données par défaut
+
+    // 5. Préparer les données pour l'insertion
+    const sessionData = {
+      sessionId,
+      responses,
+      progress,
+      totalScore: totalScore || 0, // Valeur par défaut si non fournie
+      completedAt: new Date(),
+      createdAt: new Date(),
+    };
+
+    // 6. Insérer dans la collection "sessions" (ou le nom que tu veux)
+    const result = await db.collection('sessions').insertOne(sessionData);
+
+    // 7. Retourner une réponse de succès
+    return NextResponse.json(
+      { 
+        success: true, 
+        message: 'Session sauvegardée avec succès',
+        sessionId: sessionId,
+        insertedId: result.insertedId 
+      },
+      { status: 201 } // 201 = Created
+    );
+
   } catch (error) {
+    console.error('Erreur lors de la sauvegarde:', error);
+    
     // Si une erreur serveur survient
     return NextResponse.json(
-      { error: 'Erreur serveur' },
+      { 
+        error: 'Erreur serveur lors de la sauvegarde',
+        details: error instanceof Error ? error.message : 'Erreur inconnue'
+      },
       { status: 500 } // 500 = Internal Server Error
+    );
+  }
+}
+
+/**
+ * Fonction pour gérer les requêtes GET (optionnel - pour récupérer les sessions)
+ */
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get('sessionId');
+
+    const client = await clientPromise;
+    const db = client.db();
+
+    if (sessionId) {
+      // Récupérer une session spécifique
+      const session = await db.collection('sessions').findOne({ sessionId });
+      
+      if (!session) {
+        return NextResponse.json(
+          { error: 'Session non trouvée' },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json({ session });
+    } else {
+      // Récupérer toutes les sessions (optionnel)
+      const sessions = await db.collection('sessions')
+        .find({})
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .toArray();
+
+      return NextResponse.json({ sessions });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération:', error);
+    
+    return NextResponse.json(
+      { error: 'Erreur serveur lors de la récupération' },
+      { status: 500 }
     );
   }
 }

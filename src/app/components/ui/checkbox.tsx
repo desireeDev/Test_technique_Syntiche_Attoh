@@ -1,37 +1,30 @@
 "use client";
 import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox"; // Composant checkbox accessible de Radix UI
-import { Check } from "lucide-react"; // Icône check de Lucide
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check } from "lucide-react";
+import { cn } from "@/app/lib/utils";
 
-import { cn } from "@/app/lib/utils"; // Fonction utilitaire pour concaténer des classes conditionnellement
-
-/**
- * Checkbox
- * Composant checkbox stylisé utilisant Radix UI et TailwindCSS.
- * - La logique d'état (checked, disabled, focus) est gérée par Radix.
- * - L'apparence (bordure, couleurs, icône) est gérée via TailwindCSS et classes dynamiques.
- */
 const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>, // Type de la référence pour TS
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> // Props héritées du composant Radix
+  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background", // Taille, bordure et coins arrondis
-      "data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground", // Style quand cochée
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", // Focus pour accessibilité
-      "disabled:cursor-not-allowed disabled:opacity-50", // Styles quand désactivée
-      className // Classes supplémentaires passées depuis les props
+      "checkbox-base peer h-5 w-5 shrink-0 rounded border-2 border-border bg-card transition-all", // Classes CSS globales
+      "data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground", // États cochés
+      "hover:border-primary/80 hover:shadow-md", // Hover
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2", // Focus
+      "disabled:cursor-not-allowed disabled:opacity-50", // Désactivé
+      className
     )}
-    {...props} // Spread des props comme checked, onCheckedChange, disabled, etc.
+    {...props}
   >
-    {/* Icône affichée quand la checkbox est cochée */}
     <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
-      <Check className="h-4 w-4" />
+      <Check className="h-3.5 w-3.5" /> {/* Taille d'icône légèrement réduite */}
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));
-Checkbox.displayName = CheckboxPrimitive.Root.displayName; // Nom pour React DevTools
+Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 export { Checkbox };
