@@ -1,144 +1,92 @@
-// On importe NextResponse pour pouvoir renvoyer des réponses HTTP depuis cette API
+// app/api/responses/route.ts
 import { NextResponse } from 'next/server';
-// On importe la connexion à MongoDB
 import clientPromise from '@/app/lib/mongodb';
 
 /**
- * Fonction pour valider les données envoyées dans la requête POST
- * @param body - objet contenant les données de la session
- * @returns un objet avec valid = true si tout est correct, sinon false avec la liste des erreurs
- */
-function validateSessionData(body: any) {
-  const errors: string[] = []; // Tableau pour stocker les erreurs
-
-  // Vérifie que sessionId existe et est une chaîne de caractères
-  if (!body.sessionId || typeof body.sessionId !== 'string') {
-    errors.push('sessionId est requis et doit être une string');
-  }
-
-  // Vérifie que responses existe et est un objet
-  if (!body.responses || typeof body.responses !== 'object') {
-    errors.push('responses est requis et doit être un objet');
-  }
-
-  // Vérifie que progress existe et est un objet
-  if (!body.progress || typeof body.progress !== 'object') {
-    errors.push('progress est requis');
-  }
-
-  // Si des erreurs ont été détectées, on retourne valid = false
-  if (errors.length > 0) {
-    return { valid: false, errors };
-  }
-
-  // Sinon, tout est correct
-  return { valid: true, errors: [] };
-}
-
-/**
- * Fonction qui gère les requêtes POST pour sauvegarder une session
- * @param request - la requête HTTP envoyée par le client
+ * POST /api/responses
+ * 
+ * Endpoint pour sauvegarder ou mettre à jour les réponses d'un questionnaire
+ * 
+ * Fonctionnalités :
+ * - Validation des données reçues
+ * - Sauvegarde en base de données (MongoDB)
+ * - Gestion des sessions (création ou mise à jour)
+ * - Calcul automatique du statut "complété"
+ * 
+ * @param request - Requête HTTP contenant les données du questionnaire
+ * @returns Réponse JSON avec le résultat de l'opération
  */
 export async function POST(request: Request) {
   try {
-    // 1. On récupère et parse le body de la requête JSON
+    // 1. Récupération et parsing des données de la requête
     const body = await request.json();
-
-    // 2. On valide les données reçues avec notre fonction validateSessionData
-    const validation = validateSessionData(body);
-
-    // Si les données sont invalides, on renvoie un message d'erreur 400
-    if (!validation.valid) {
+    
+    // 2. Validation des champs obligatoires
+    // Vérifie que les données essentielles sont présentes
+    if (!body.sessionId || !body.responses || !body.progress) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.errors },
-        { status: 400 } // 400 = Bad Request
+        { error: 'sessionId, responses et progress sont requis' },
+        { status: 400 } // 400 Bad Request - données manquantes
       );
     }
 
-    // 3. On récupère les valeurs du body (après validation)
-    const { sessionId, responses, progress, totalScore } = body;
-
-    // 4. Connexion à MongoDB
+    // 3. Extraction des données depuis le body
+    const { sessionId, responses, progress, totalScore, userId } = body;
+    
+    // 4. Connexion à la base de données MongoDB
     const client = await clientPromise;
-    const db = client.db(); // Utilise la base de données par défaut
-
-    // 5. Préparer les données pour l'insertion
-    const sessionData = {
+    const db = client.db('questionnaire_db');
+    
+    // 5. Opération UPSERT (UPDATE or INSERT)
+    // - Si la session existe : mise à jour
+    // - Si la session n'existe pas : création
+    const result = await db.collection('sessions').updateOne(
+      // Filtre : recherche par sessionId
+      { sessionId },
+      {
+        // Opérateur $set : met à jour les champs
+        $set: {
+          responses,           // Réponses utilisateur
+          progress,            // Progression dans le questionnaire
+          totalScore: totalScore || 0, // Score total (0 par défaut)
+          userId: userId || null,      // ID utilisateur (null si anonyme)
+          updatedAt: new Date(),       // Horodatage de mise à jour
+          
+          // Si c'est la dernière étape, marquer comme complété
+          ...(progress.currentStep === progress.totalSteps && {
+            isCompleted: true,         // Statut complété
+            completedAt: new Date()    // Date de complétion
+          })
+        },
+        // Opérateur $setOnInsert : champs définis seulement à l'insertion
+        $setOnInsert: {
+          createdAt: new Date(),       // Date de création
+          startedAt: new Date(),       // Date de début
+          questionnaireId: 'dev-profile-2024' // Identifiant du questionnaire
+        }
+      },
+      { upsert: true } // Option UPSERT : créer si n'existe pas
+    );
+    
+    // 6. Réponse de succès
+    return NextResponse.json({ 
+      success: true,
       sessionId,
-      responses,
-      progress,
-      totalScore: totalScore || 0, // Valeur par défaut si non fournie
-      completedAt: new Date(),
-      createdAt: new Date(),
-    };
-
-    // 6. Insérer dans la collection "sessions" (ou le nom que tu veux)
-    const result = await db.collection('sessions').insertOne(sessionData);
-
-    // 7. Retourner une réponse de succès
-    return NextResponse.json(
-      { 
-        success: true, 
-        message: 'Session sauvegardée avec succès',
-        sessionId: sessionId,
-        insertedId: result.insertedId 
-      },
-      { status: 201 } // 201 = Created
-    );
-
-  } catch (error) {
-    console.error('Erreur lors de la sauvegarde:', error);
+      created: result.upsertedCount > 0,  // True si nouvelle session créée
+      modified: result.modifiedCount > 0  // True si session mise à jour
+    }, { 
+      // Statut HTTP : 201 Created si nouvelle session, 200 OK si mise à jour
+      status: result.upsertedCount > 0 ? 201 : 200 
+    });
     
-    // Si une erreur serveur survient
-    return NextResponse.json(
-      { 
-        error: 'Erreur serveur lors de la sauvegarde',
-        details: error instanceof Error ? error.message : 'Erreur inconnue'
-      },
-      { status: 500 } // 500 = Internal Server Error
-    );
-  }
-}
-
-/**
- * Fonction pour gérer les requêtes GET (optionnel - pour récupérer les sessions)
- */
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const sessionId = searchParams.get('sessionId');
-
-    const client = await clientPromise;
-    const db = client.db();
-
-    if (sessionId) {
-      // Récupérer une session spécifique
-      const session = await db.collection('sessions').findOne({ sessionId });
-      
-      if (!session) {
-        return NextResponse.json(
-          { error: 'Session non trouvée' },
-          { status: 404 }
-        );
-      }
-
-      return NextResponse.json({ session });
-    } else {
-      // Récupérer toutes les sessions (optionnel)
-      const sessions = await db.collection('sessions')
-        .find({})
-        .sort({ createdAt: -1 })
-        .limit(50)
-        .toArray();
-
-      return NextResponse.json({ sessions });
-    }
   } catch (error) {
-    console.error('Erreur lors de la récupération:', error);
+    // 7. Gestion des erreurs
+    console.error('Erreur sauvegarde:', error);
     
+    // Réponse d'erreur serveur
     return NextResponse.json(
-      { error: 'Erreur serveur lors de la récupération' },
-      { status: 500 }
+      { error: 'Erreur serveur' },
+      { status: 500 } // 500 Internal Server Error
     );
   }
 }
