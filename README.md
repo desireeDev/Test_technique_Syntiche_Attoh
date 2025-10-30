@@ -168,7 +168,7 @@ Volume persistant pour les données
 Les données de test incluent 6 questions réparties sur 5 étapes avec différents types de questions (choix multiple, unique, échelle, texte).
 ````
 
-📁 Structure du Projet
+###📁 Structure du Projet
 
 
 <img width="452" height="911" alt="Structure" src="https://github.com/user-attachments/assets/58410903-e84f-4d4c-99ff-46b1cb0a3e80" />
@@ -197,7 +197,7 @@ TEST_TECHNIQUE/
 
 ````
 
-🐛 État du Projet & Solutions
+###🐛 État du Projet & Solutions
 ````
 🔴 Problème Critique : Affichage des Résultats
 Localisation : /src/app/results/page.tsx et composant ResultsChart
@@ -239,7 +239,8 @@ Responsive design : Optimisé mobile, tablette, desktop
 
 Performance : Scores Lighthouse excellents
 
-🔮 Roadmap
+###🔮 Roadmap
+````
 Version 1.1 (Imminent)
 Résolution de l'affichage des résultats - Correction des graphiques
 
@@ -255,6 +256,7 @@ Tests unitaires - Couverture de tests
 Tableau de bord admin - Analytics avancés
 
 Internationalisation - Support multi-langues
+````
 
 
 
