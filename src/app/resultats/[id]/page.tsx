@@ -7,9 +7,12 @@ import { motion } from "framer-motion";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { Download, Home, ArrowLeft, Calendar, User, Star } from "lucide-react";
-import { generateChartData, CategoryScore, RadarData, ChartData } from "@/app/utils/chartData";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { generateChartData } from "@/app/utils/chartData";
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
+// ====================================================================
+// INTERFACE DE LA SESSION
+// ====================================================================
 interface Session {
   sessionId: string;
   responses: Record<string, any>;
@@ -23,19 +26,26 @@ interface Session {
   isCompleted?: boolean;
 }
 
-// Couleurs pour les graphiques - palette prédéfinie pour une cohérence visuelle
+// ====================================================================
+// COULEURS POUR LES GRAPHIQUES
+// ====================================================================
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d'];
 
+// ====================================================================
+// COMPOSANT PRINCIPAL - PAGE DE RÉSULTATS
+// ====================================================================
 export default function ResultPage() {
+  // ====================================================================
+  // HOOKS ET ÉTATS
+  // ====================================================================
   const params = useParams();
   const router = useRouter();
   const sessionId = params.id as string;
   
-  // ÉTATS DE GESTION DES DONNÉES
-  const [session, setSession] = useState<Session | null>(null);      // Session récupérée
-  const [loading, setLoading] = useState(true);                      // État de chargement
-  const [error, setError] = useState<string | null>(null);           // Gestion des erreurs
-  const [chartData, setChartData] = useState<any>(null);             // Données pour les graphiques
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [chartData, setChartData] = useState<any>(null);
 
   // ====================================================================
   // EFFET : RÉCUPÉRATION DE LA SESSION ET GÉNÉRATION DES GRAPHIQUES
@@ -43,13 +53,18 @@ export default function ResultPage() {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        console.log("🔍 Recherche session:", sessionId);
+        console.log("🔍 === DÉBUT RECHERCHE SESSION ===");
+        console.log("📌 Session ID recherché:", sessionId);
         
-        // STRATÉGIE DE RÉCUPÉRATION EN 2 ÉTAPES :
-        
+        // ====================================================================
         // 1. ESSAI LOCALSTORAGE (RAPIDE) - données persistées côté client
+        // ====================================================================
+        console.log("💾 1. Recherche dans localStorage...");
         const saved = localStorage.getItem('questionnaire-history');
+        console.log("📁 localStorage 'questionnaire-history' trouvé:", !!saved);
+        
         const history = saved ? JSON.parse(saved) : [];
+        console.log("📚 Historique chargé:", history.length, "sessions disponibles");
         
         // Recherche par sessionId OU id (pour compatibilité)
         const localSession = history.find((item: any) => 
@@ -57,70 +72,95 @@ export default function ResultPage() {
         );
         
         if (localSession) {
-          console.log("✅ Session trouvée dans localStorage");
+          console.log("✅ 1. SESSION TROUVÉE DANS LOCALSTORAGE");
+          console.log("📊 Réponses de la session:", localSession.responses);
+          
+          // Vérification détaillée des réponses critiques
+          console.log("🧪 VÉRIFICATION DES RÉPONSES CRITIQUES:");
+          console.log("   - q2 (expérience):", localSession.responses.q2?.answer);
+          console.log("   - q3 (spécialisation):", localSession.responses.q3?.answer);
+          console.log("   - q4 (frontend):", localSession.responses.q4?.answer);
+          console.log("   - q7 (backend):", localSession.responses.q7?.answer);
+          
           setSession(localSession);
           
-          // 🎯 GÉNÉRATION DES DONNÉES POUR GRAPHIQUES
-          // Transforme les réponses brutes en données structurées pour Recharts
+          // ====================================================================
+          // GÉNÉRATION DES DONNÉES POUR GRAPHIQUES
+          // ====================================================================
+          console.log("📊 2. GÉNÉRATION DES DONNÉES GRAPHIQUES...");
           const generatedChartData = generateChartData(localSession.responses);
+          
+          console.log("🎯 3. DONNÉES GRAPHIQUES GÉNÉRÉES:");
+          console.log("   - Radar data:", generatedChartData.radarData);
+          console.log("   - Pie data:", generatedChartData.pieData);
+          console.log("   - Total score:", generatedChartData.totalScore);
+          
           setChartData(generatedChartData);
           setLoading(false);
+          console.log("✅ === CHARGEMENT TERMINÉ (localStorage) ===");
           return;
         }
 
+        console.log("❌ 1. Session NON trouvée dans localStorage");
+        
+        // ====================================================================
         // 2. FALLBACK API (SI PAS EN LOCAL) - données serveur MongoDB
-        console.log("🌐 Recherche via API...");
-        const res = await fetch(`/api/responses?sessionId=${sessionId}`);
+        // ====================================================================
+        console.log("🌐 2. Recherche via API...");
+        const apiUrl = `/api/responses?sessionId=${sessionId}`;
+        console.log("   URL API:", apiUrl);
+        
+        const res = await fetch(apiUrl);
+        console.log("   Statut API:", res.status, res.statusText);
         
         if (!res.ok) {
-          throw new Error(`Erreur API: ${res.status}`);
+          throw new Error(`Erreur API: ${res.status} - ${res.statusText}`);
         }
 
         const data = await res.json();
-        console.log("📦 Réponse API:", data);
+        console.log("📦 3. RÉPONSE API REÇUE:", data);
         
-        // GESTION DES DIFFÉRENTS FORMATS DE RÉPONSE
         if (data.session) {
-          // Format standard : data.session (objet unique)
-          console.log("✅ Session trouvée via API");
+          console.log("✅ 4. SESSION TROUVÉE VIA API");
+          console.log("📊 Réponses API:", data.session.responses);
+          
           setSession(data.session);
+          
           const generatedChartData = generateChartData(data.session.responses);
-          setChartData(generatedChartData);
-        } else if (data.sessions) {
-          // Ancien format : data.sessions (rétrocompatibilité)
-          console.log("✅ Session trouvée (ancienne structure)");
-          setSession(data.sessions);
-          const generatedChartData = generateChartData(data.sessions.responses);
+          console.log("📊 Données graphiques générées (API):", generatedChartData);
           setChartData(generatedChartData);
         } else {
-          // Aucune donnée trouvée
-          console.warn("❌ Aucune session dans la réponse API");
+          console.warn("❌ 4. Aucune session dans la réponse API");
           setError("Session non trouvée dans la base de données");
         }
       } catch (err) {
-        console.error("💥 Erreur chargement session:", err);
+        console.error("💥 === ERREUR CRITIQUE ===");
+        console.error("   Message:", err instanceof Error ? err.message : err);
         setError(err instanceof Error ? err.message : "Erreur inconnue");
       } finally {
+        console.log("🏁 === CHARGEMENT TERMINÉ ===");
         setLoading(false);
       }
     };
 
     if (sessionId) {
+      console.log("🚀 LANCEMENT DU CHARGEMENT...");
       fetchSession();
     } else {
+      console.error("❌ ID de session manquant");
       setError("ID de session manquant");
       setLoading(false);
     }
   }, [sessionId]);
 
   // ====================================================================
-  // COMPOSANTS D'ÉTAT : LOADING ET ERREUR
+  // ÉTATS DE CHARGEMENT ET D'ERREUR
   // ====================================================================
   if (loading) {
+    console.log("⏳ Rendu: État LOADING");
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background flex items-center justify-center">
         <div className="text-center">
-          {/* Animation de chargement CSS pure */}
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Chargement des résultats...</p>
           <p className="text-sm text-muted-foreground mt-2">Session: {sessionId}</p>
@@ -129,7 +169,8 @@ export default function ResultPage() {
     );
   }
 
-  if (error || !session || !chartData) {
+  if (error || !session) {
+    console.log("❌ Rendu: État ERREUR", { error, session: !!session });
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background flex items-center justify-center">
         <Card className="p-8 max-w-md mx-auto text-center">
@@ -158,21 +199,49 @@ export default function ResultPage() {
     );
   }
 
+  // Si chartData n'est pas encore chargé mais session oui
+  if (!chartData) {
+    console.log("⚠️ Rendu: Session OK mais chartData MANQUANT");
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Génération des graphiques...</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Session chargée mais données graphiques manquantes
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("✅ Rendu: TOUT EST PRÊT", { 
+    session: !!session, 
+    chartData: !!chartData,
+    radarData: chartData.radarData?.length,
+    pieData: chartData.pieData?.length
+  });
+
   // ====================================================================
   // CALCULS ET EXTRACTIONS DE DONNÉES
   // ====================================================================
   
-  // 📊 CALCUL DU SCORE TOTAL
-  // Si totalScore n'existe pas, on le calcule en sommant tous les scores individuels
+  /**
+   * Calcule le score total à partir des réponses
+   */
   const totalScore = session.totalScore || Object.values(session.responses).reduce((total: number, r: any) => total + (r.score || 0), 0);
   const totalQuestions = Object.keys(session.responses).length;
 
-  // 👤 EXTRACTION DES INFORMATIONS PRINCIPALES
+  /**
+   * Extrait le nom de l'utilisateur depuis les réponses
+   */
   const getName = () => session.responses.q1?.answer || "Anonyme";
   
+  /**
+   * Transforme l'expérience technique en libellé lisible
+   */
   const getExperience = () => {
     const exp = session.responses.q2?.answer;
-    // Mapping des valeurs techniques vers des libellés utilisateur
     const experienceMap: Record<string, string> = {
       "junior": "Junior (0-2 ans)",
       "intermediate": "Intermédiaire (2-5 ans)", 
@@ -182,6 +251,9 @@ export default function ResultPage() {
     return experienceMap[exp] || exp || "Non spécifié";
   };
   
+  /**
+   * Transforme la spécialisation technique en libellé lisible
+   */
   const getSpecialization = () => {
     const spec = session.responses.q3?.answer;
     const specMap: Record<string, string> = {
@@ -194,6 +266,9 @@ export default function ResultPage() {
     return specMap[spec] || spec || "Non spécifié";
   };
 
+  // ====================================================================
+  // RENDU PRINCIPAL
+  // ====================================================================
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background py-8 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -264,121 +339,84 @@ export default function ResultPage() {
           </Card>
 
           {/* ==================================================================== */}
-          {/* SECTION GRAPHIQUES - PARTIE COMPLEXE */}
+          {/* SECTION GRAPHIQUES - CORRIGÉE POUR ÉVITER LES ERREURS DE DIMENSIONS */}
           {/* ==================================================================== */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             
-            {/* 📈 GRAPHIQUE RADAR - PROFIL DE COMPÉTENCES */}
-            {/* Idéal pour montrer les forces/faiblesses sur plusieurs axes */}
+            {/* 📊 GRAPHIQUE RADAR - PROFIL DE COMPÉTENCES */}
             <Card className="p-6">
               <h3 className="text-xl font-bold mb-4">Profil de Compétences</h3>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart data={chartData.radarData}>
-                    <PolarGrid /> {/* Grille polaire (cercles concentriques) */}
-                    <PolarAngleAxis dataKey="category" /> {/* Catégories sur l'angle */}
-                    <PolarRadiusAxis angle={30} domain={[0, 40]} /> {/* Échelle radiale */}
-                    <Radar
-                      name="Compétences"
-                      dataKey="score" // Donnée à afficher
-                      stroke="#8884d8" // Couleur de la ligne
-                      fill="#8884d8" // Couleur de remplissage
-                      fillOpacity={0.6} // Transparence
-                    />
-                    <Tooltip /> {/* Infobulle au survol */}
-                    <Legend /> {/* Légende des données */}
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-
-            {/* 📊 GRAPHIQUE EN BARRES - SCORES PAR CATÉGORIE */}
-            {/* Comparaison visuelle entre score obtenu et score max */}
-            <Card className="p-6">
-              <h3 className="text-xl font-bold mb-4">Scores par Catégorie</h3>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData.categories}>
-                    <CartesianGrid strokeDasharray="3 3" /> {/* Grille en pointillés */}
-                    <XAxis dataKey="name" /> {/* Noms des catégories */}
-                    <YAxis /> {/* Échelle des scores */}
-                    <Tooltip 
-                      formatter={(value) => [`${value} pts`, 'Score']} // Formatage infobulle
-                      labelFormatter={(label) => `Catégorie: ${label}`}
-                    />
-                    <Legend />
-                    {/* Barre du score obtenu */}
-                    <Bar dataKey="score" name="Score obtenu" fill="#8884d8" />
-                    {/* Barre du score maximum (référence) */}
-                    <Bar dataKey="maxScore" name="Score maximum" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="h-80 min-h-80 w-full"> {/* ⚠️ AJOUT: min-h-80 et w-full pour dimensions stables */}
+                {chartData.radarData && chartData.radarData.length > 0 ? (
+                  <ResponsiveContainer 
+                    width="100%" 
+                    height="100%" 
+                    minWidth={400}  
+                    minHeight={320} 
+                  >
+                    <RadarChart data={chartData.radarData}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="subject" />
+                      <PolarRadiusAxis angle={30} domain={[0, 60]} />
+                      <Radar
+                        name="Compétences"
+                        dataKey="A"
+                        stroke="#8884d8"
+                        fill="#8884d8"
+                        fillOpacity={0.6}
+                      />
+                      <Tooltip />
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    ❌ Données radar non disponibles
+                  </div>
+                )}
               </div>
             </Card>
 
             {/* 🥧 GRAPHIQUE CAMEMBERT - SPÉCIALISATION */}
-            {/* Montre la répartition en pourcentages */}
-            {chartData.roleData.length > 0 && (
+            {chartData.pieData && chartData.pieData.length > 0 ? (
               <Card className="p-6">
                 <h3 className="text-xl font-bold mb-4">Spécialisation</h3>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="h-80 min-h-80 w-full"> {/* ⚠️ AJOUT: min-h-80 et w-full */}
+                  <ResponsiveContainer 
+                    width="100%" 
+                    height="100%" 
+                    minWidth={400}  
+                    minHeight={320} 
+                  >
                     <PieChart>
                       <Pie
-                        data={chartData.roleData}
-                        cx="50%" // Centre X
-                        cy="50%" // Centre Y
-                        labelLine={false} // Pas de ligne vers les labels
-                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`} // Label formaté
-                        outerRadius={80} // Taille du camembert
-                        fill="#8884d8"
-                        dataKey="value" // Donnée pour calculer les parts
+                        data={chartData.pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                        outerRadius={80}
+                        dataKey="value"
                       >
-                        {/* Attribution des couleurs à chaque segment */}
-                        {chartData.roleData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        {chartData.pieData.map((entry: any, index: number) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill || COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value) => [`${value}%`, 'Affinité']} />
+                      <Tooltip />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
               </Card>
+            ) : (
+              <Card className="p-6">
+                <h3 className="text-xl font-bold mb-4">Spécialisation</h3>
+                <div className="h-80 flex items-center justify-center text-muted-foreground">
+                  ❌ Données camembert non disponibles
+                </div>
+              </Card>
             )}
 
-            {/* 📊 GRAPHIQUE BARRES VERTICALES - PRÉFÉRENCES DE PROJET */}
-            {/* Layout vertical pour meilleure lisibilité des labels longs */}
-            <Card className="p-6">
-              <h3 className="text-xl font-bold mb-4">Préférences de Projet</h3>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart 
-                    data={chartData.projectPreferences} 
-                    layout="vertical" // ⚡ Layout vertical pour plus d'espace
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" domain={[0, 100]} /> 
-                    <YAxis 
-                      type="category" 
-                      dataKey="name" 
-                      width={80} // Largeur fixe pour les labels
-                    />
-                    <Tooltip formatter={(value) => [`${value}%`, 'Affinité']} />
-                    <Legend />
-                    <Bar dataKey="value" name="Affinité">
-                      {/* Couleurs personnalisées depuis les données */}
-                      {chartData.projectPreferences.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={entry.color || COLORS[index % COLORS.length]} 
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
           </div>
 
           {/* ==================================================================== */}
@@ -413,7 +451,7 @@ export default function ResultPage() {
               className="flex items-center gap-2"
             >
               <Home className="w-4 h-4" />
-              Retour à  notre accueil
+              Retour à l'accueil
             </Button>
           </div>
         </motion.div>
