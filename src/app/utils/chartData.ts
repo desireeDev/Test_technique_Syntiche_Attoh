@@ -28,17 +28,7 @@ const getExperienceScore = (experience: string): number => {
   };
   return scores[experience] || 0;
 };
-// Fonction pour obtenir le score basé sur la spécialisation
-const getSpecializationScore = (spec: string): number => {
-  const scores: Record<string, number> = {
-    frontend: 10,
-    backend: 20,
-    fullstack: 30,
-    mobile: 40,
-    devops: 50,
-  };
-  return scores[spec] || 0;
-};
+
 // Fonction principale pour générer les données des graphiques
 export const generateChartData = (responses: QuestionnaireResponse) => {
   const specialization = responses.q3 as string;
