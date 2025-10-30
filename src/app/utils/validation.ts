@@ -1,4 +1,4 @@
-import { Question, QuestionnaireResponse } from "@/types/questionnaire";
+import { Question, QuestionnaireResponse } from "@/app/types/questionnaire";
 
 export const validateQuestion = (
   question: Question,

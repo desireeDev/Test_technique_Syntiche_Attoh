@@ -1,7 +1,10 @@
+"use client"; // Active les hooks côté client
+
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation"; // Hook Next.js pour la navigation
 import { motion, AnimatePresence } from "framer-motion";
 
+// Composants UI réutilisables
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
@@ -10,22 +13,27 @@ import { ProgressBar } from "@/app/components/ui/progress-bar";
 import { RadioGroupCard } from "@/app/components/ui/radio-group-card";
 import { CheckboxGroupCard } from "@/app/components/ui/checkbox-group-card";
 
+// Données et types
 import { questionnaireSteps } from "@/app/data/questions";
 import { Question, QuestionnaireResponse, Step } from "@/app/types/questionnaire";
+
+// Fonctions utilitaires pour le stockage et validation
 import { saveResponses, loadResponses, clearResponses, saveToHistory } from "@/app/utils/storage";
 import { validateStep, shouldShowQuestion } from "@/app/utils/validation";
 
+// Icônes et notifications
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const Questionnaire = () => {
-  const navigate = useNavigate();
+  const router = useRouter(); // Hook pour naviguer entre les pages
 
+  // États pour l'étape actuelle, les réponses et la direction d'animation
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [responses, setResponses] = useState<QuestionnaireResponse>({});
   const [direction, setDirection] = useState<number>(1);
 
-  // Charger les réponses sauvegardées
+  // Charger les réponses sauvegardées au montage du composant
   useEffect(() => {
     const saved = loadResponses();
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -37,6 +45,7 @@ const Questionnaire = () => {
     saveResponses(responses);
   }, [responses]);
 
+  // Étape courante
   const step: Step = questionnaireSteps[currentStep];
   const isLastStep = currentStep === questionnaireSteps.length - 1;
 
@@ -45,14 +54,15 @@ const Questionnaire = () => {
     shouldShowQuestion(q, responses)
   );
 
+  // Vérifie si l'utilisateur peut passer à l'étape suivante
   const canProceed = validateStep(visibleQuestions, responses);
 
+  // Passer à l'étape suivante
   const handleNext = () => {
     if (!canProceed) {
       toast.error("Veuillez répondre à toutes les questions obligatoires");
       return;
     }
-
     if (isLastStep) {
       handleComplete();
     } else {
@@ -61,6 +71,7 @@ const Questionnaire = () => {
     }
   };
 
+  // Revenir à l'étape précédente
   const handlePrevious = () => {
     if (currentStep > 0) {
       setDirection(-1);
@@ -68,6 +79,7 @@ const Questionnaire = () => {
     }
   };
 
+  // Compléter le questionnaire et sauvegarder dans l'historique
   const handleComplete = () => {
     const result = {
       id: Date.now().toString(),
@@ -75,13 +87,13 @@ const Questionnaire = () => {
       responses,
       completedAt: new Date(),
     };
-
     saveToHistory(result);
     clearResponses();
     toast.success("Questionnaire complété !");
-    navigate(`/results/${result.id}`);
+    router.push(`/results/${result.id}`); // Navigation Next.js
   };
 
+  // Mettre à jour la réponse d'une question
   const updateResponse = (questionId: string, value: string | string[]) => {
     setResponses(prev => ({
       ...prev,
@@ -89,6 +101,7 @@ const Questionnaire = () => {
     }));
   };
 
+  // Variants pour l'animation des étapes
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 1000 : -1000,
@@ -109,10 +122,12 @@ const Questionnaire = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background py-8 px-4">
       <div className="container mx-auto max-w-3xl">
+        {/* Barre de progression */}
         <div className="mb-8">
           <ProgressBar current={currentStep + 1} total={questionnaireSteps.length} />
         </div>
 
+        {/* Animation de l'étape */}
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentStep}
@@ -132,6 +147,7 @@ const Questionnaire = () => {
                 {step.description && <p className="text-muted-foreground">{step.description}</p>}
               </div>
 
+              {/* Questions de l'étape */}
               <div className="space-y-8">
                 {visibleQuestions.map((question: Question) => (
                   <div key={question.id} className="space-y-3">
@@ -140,6 +156,7 @@ const Questionnaire = () => {
                       {question.required && <span className="text-destructive ml-1">*</span>}
                     </label>
 
+                    {/* Types de questions */}
                     {question.type === "radio" && question.options && (
                       <RadioGroupCard
                         options={question.options}
@@ -181,6 +198,7 @@ const Questionnaire = () => {
           </motion.div>
         </AnimatePresence>
 
+        {/* Boutons précédent / suivant */}
         <div className="flex justify-between mt-8">
           <Button variant="outline" size="lg" onClick={handlePrevious} disabled={currentStep === 0}>
             <ArrowLeft className="w-5 h-5 mr-2" />

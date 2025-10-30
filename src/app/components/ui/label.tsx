@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label"; // Label accessible de Radix UI
 import { cva, type VariantProps } from "class-variance-authority"; // Gestion des variantes de style

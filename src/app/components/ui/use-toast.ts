@@ -1,9 +1,57 @@
-// Import du hook personnalisé `useToast` et de la fonction `toast`
-// depuis le fichier local "@/hooks/use-toast"
-import { useToast, toast } from "@/app/hooks/use-toast";
+"use client";
 
-// Réexport de `useToast` et `toast`
-// Cela permet de les importer depuis ce fichier plutôt que de devoir utiliser le chemin complet
-// Exemple :
-// import { useToast, toast } from "@/components/ui/toast" au lieu de "@/hooks/use-toast"
-export { useToast, toast };
+import * as React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+export type ToastType = {
+  id: string;
+  title?: string;
+  description?: string;
+  open: boolean;
+};
+
+type State = {
+  toasts: ToastType[];
+};
+
+const TOAST_REMOVE_DELAY = 4000;
+
+let listeners: ((state: State) => void)[] = [];
+let memoryState: State = { toasts: [] };
+
+function dispatch(action: { type: "ADD" | "REMOVE"; toast?: ToastType; toastId?: string }) {
+  switch (action.type) {
+    case "ADD":
+      if (!action.toast) return;
+      memoryState = { toasts: [action.toast, ...memoryState.toasts] };
+      break;
+    case "REMOVE":
+      memoryState = {
+        toasts: memoryState.toasts.filter((t) => t.id !== action.toastId),
+      };
+      break;
+  }
+  listeners.forEach((listener) => listener(memoryState));
+}
+
+export function toast({ title, description }: { title?: string; description?: string }) {
+  const id = Date.now().toString();
+  dispatch({ type: "ADD", toast: { id, title, description, open: true } });
+
+  setTimeout(() => dispatch({ type: "REMOVE", toastId: id }), TOAST_REMOVE_DELAY);
+}
+
+export function useToast() {
+  const [state, setState] = React.useState<State>(memoryState);
+
+  React.useEffect(() => {
+    listeners.push(setState);
+    return () => {
+      listeners = listeners.filter((l) => l !== setState);
+    };
+  }, []);
+
+  return {
+    toasts: state.toasts,
+  };
+}

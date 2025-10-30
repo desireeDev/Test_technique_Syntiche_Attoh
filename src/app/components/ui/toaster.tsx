@@ -1,25 +1,32 @@
-// Composant Toaster réutilisable
-import { useToast } from "@/app/hooks/use-toast";
-import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@/app/components/ui/toast";
+"use client";
+
+import { useToast, ToastType } from "./use-toast";
+import { ToastClose } from "@/app/components/ui/toast";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function Toaster() {
   const { toasts } = useToast();
 
   return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && <ToastDescription>{description}</ToastDescription>}
+    <div className="fixed bottom-4 right-4 flex flex-col gap-3 z-50">
+      <AnimatePresence>
+        {toasts.map((t: ToastType) => (
+          <motion.div
+            key={t.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white border rounded-lg shadow-lg p-4 w-80 flex justify-between items-start"
+          >
+            <div className="flex flex-col gap-1">
+              {t.title && <p className="font-semibold">{t.title}</p>}
+              {t.description && <p className="text-sm text-muted-foreground">{t.description}</p>}
             </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        );
-      })}
-      <ToastViewport />
-    </ToastProvider>
+            <ToastClose onClick={() => {}} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
   );
 }

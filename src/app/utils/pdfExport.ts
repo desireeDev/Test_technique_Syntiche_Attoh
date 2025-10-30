@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import { QuestionnaireResponse } from "@/types/questionnaire";
+import { QuestionnaireResponse } from "@/app/types/questionnaire";
 
 export const exportToPDF = (responses: QuestionnaireResponse): void => {
   const doc = new jsPDF();

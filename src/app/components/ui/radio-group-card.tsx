@@ -1,3 +1,5 @@
+  "use client";
+  
   // Composant RadioGroupCard réutilisable
 import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
 import { Label } from "@/app/components/ui/label";

@@ -1,4 +1,4 @@
-import { Step } from "@/types/questionnaire";
+import { Step } from "@/app/types/questionnaire";
 
 export const questionnaireSteps: Step[] = [
   {

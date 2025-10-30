@@ -1,3 +1,4 @@
+"use client";
 // Import de React pour utiliser forwardRef, types et props
 import * as React from "react";
 

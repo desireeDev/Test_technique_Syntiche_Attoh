@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox"; // Composant checkbox accessible de Radix UI
 import { Check } from "lucide-react"; // Icône check de Lucide

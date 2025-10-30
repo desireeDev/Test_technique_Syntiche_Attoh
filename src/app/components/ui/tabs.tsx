@@ -1,3 +1,4 @@
+"use client";
 // Composant Tabs réutilisable
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";

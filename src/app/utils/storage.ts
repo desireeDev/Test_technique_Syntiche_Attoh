@@ -1,4 +1,4 @@
-import { QuestionnaireResponse, QuestionnaireResult } from "@/types/questionnaire";
+import { QuestionnaireResponse, QuestionnaireResult } from "@/app/types/questionnaire";
 
 const STORAGE_KEY = "questionnaire_responses";
 const HISTORY_KEY = "questionnaire_history";

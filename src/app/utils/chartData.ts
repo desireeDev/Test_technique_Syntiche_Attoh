@@ -1,4 +1,4 @@
-import { QuestionnaireResponse } from "@/types/questionnaire";
+import { QuestionnaireResponse } from "@/app/types/questionnaire";
 
 export interface ChartData {
   name: string;

@@ -1,7 +1,7 @@
 // On importe NextResponse pour pouvoir renvoyer des réponses HTTP depuis cette API
 import { NextResponse } from 'next/server';
 // On importe la connexion à MongoDB
-import clientPromise from '@/lib/mongodb';
+import clientPromise from '@/app/lib/mongodb';
 
 /**
  * Fonction pour valider les données envoyées dans la requête POST

@@ -1,3 +1,5 @@
+"use client";
+
 //fichier pour la barre de progression
 import { cn } from "@/app/lib/utils";
 

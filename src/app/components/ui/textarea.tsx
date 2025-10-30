@@ -1,3 +1,4 @@
+"use client";
 // Composant Textarea réutilisable
 import * as React from "react";
 

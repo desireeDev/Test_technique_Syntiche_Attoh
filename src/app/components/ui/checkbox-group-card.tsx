@@ -1,3 +1,4 @@
+"use client";
 import { Checkbox } from "@/app/components/ui/checkbox"; // Composant Checkbox réutilisable
 import { Label } from "@/app/components/ui/label"; // Composant Label réutilisable
 import { cn } from "@/app/lib/utils"; // Utilitaire pour concaténer des classes conditionnellement
