@@ -1,0 +1,32 @@
+# Version du format Docker Compose
+version: '3.8'
+
+# Définition des services à lancer
+services:
+  # Service MongoDB (base de données)
+  mongodb:
+    image: mongo:latest                  # Image Docker officielle MongoDB (dernière version)
+    container_name: mongodb              # Nom du conteneur pour identification facile
+    ports:
+      - "27017:27017"                   # Map le port 27017 du conteneur au port 27017 de ta machine
+    environment:
+      MONGO_INITDB_DATABASE: questionnaire_db  # Nom de la base créée automatiquement à l'initialisation
+    volumes:
+      - mongodb_data:/data/db           # Persistance des données dans un volume Docker (évite la perte à l'arrêt)
+
+  # Service Mongo Express (interface web pour MongoDB)
+  mongo-express:
+    image: mongo-express:latest          # Image Docker officielle de Mongo Express
+    container_name: mongo-express        # Nom du conteneur
+    depends_on:
+      - mongodb                          # Assure que MongoDB est lancé avant Mongo Express
+    ports:
+      - "8081:8081"                      # Map le port 8081 du conteneur au port 8081 de ta machine
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin      # Utilisateur admin pour Mongo Express
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123  # Mot de passe admin pour Mongo Express
+      ME_CONFIG_MONGODB_SERVER: mongodb          # Nom du service MongoDB à utiliser par Mongo Express
+
+# Définition des volumes pour persister les données
+volumes:
+  mongodb_data:                          # Volume nommé pour stocker les données MongoDB de façon persistante

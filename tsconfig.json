@@ -1,34 +1,68 @@
 {
   "compilerOptions": {
+    // Version cible de JavaScript à laquelle TypeScript va compiler
     "target": "ES2017",
+
+    // Bibliothèques incluses pour le type checking (DOM, itérables, fonctionnalités ESNext)
     "lib": ["dom", "dom.iterable", "esnext"],
+
+    // Autorise l'import de fichiers JavaScript
     "allowJs": true,
+
+    // Ignore la vérification des fichiers de déclaration de type des modules externes
     "skipLibCheck": true,
+
+    // Active le mode strict pour un contrôle de type maximal
     "strict": true,
+
+    // N'émet pas de fichiers JavaScript compilés (utile si Next.js s'occupe de la compilation)
     "noEmit": true,
+
+    // Permet l'import de modules CommonJS avec import/export ES
     "esModuleInterop": true,
+
+    // Type de module utilisé dans la compilation
     "module": "esnext",
+
+    // Stratégie de résolution des modules
     "moduleResolution": "bundler",
+
+    // Permet d'importer des fichiers JSON comme modules
     "resolveJsonModule": true,
+
+    // Assure que chaque fichier est traité comme un module isolé
     "isolatedModules": true,
+
+    // Syntaxe JSX utilisée pour React (nouveau JSX transform)
     "jsx": "react-jsx",
+
+    // Active la compilation incrémentale pour accélérer les builds successifs
     "incremental": true,
+
+    // Plugins TypeScript, ici pour Next.js
     "plugins": [
       {
         "name": "next"
       }
     ],
+
+    // Alias de chemins pour simplifier les imports
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": [
+    // Fichier d'environnement Next.js
     "next-env.d.ts",
+    // Tous les fichiers TypeScript et TSX
     "**/*.ts",
     "**/*.tsx",
+    // Types générés par Next.js
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
+    // Fichiers .mts (TypeScript modules)
     "**/*.mts"
   ],
+  // Dossiers à exclure du compilateur
   "exclude": ["node_modules"]
 }
