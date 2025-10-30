@@ -19,7 +19,7 @@
 - [🌟 Aperçu](#-aperçu)
 - [⚡ Fonctionnalités](#-fonctionnalités)
 - [🛠️ Stack Technique](#️-stack-technique)
-- [🛠️ Capture d'ecran de l'application](#️-capture)
+- [📸 Capture d'écran](#-capture-décran)
 - [🚀 Installation Rapide](#-installation-rapide)
 - [📁 Structure du Projet](#-structure-du-projet)
 - [🐛 État du Projet & Solutions](#-état-du-projet--solutions)
@@ -92,7 +92,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 - **Docker Compose** - Orchestration multi-services
 
 
-## 🛠️ Capture des interfaces de l'application
+## 📸 Capture d'écran
 
 ### Page d'Accueil
 
@@ -249,4 +249,5 @@ Tests unitaires - Couverture de tests
 Tableau de bord admin - Analytics avancés
 
 Internationalisation - Support multi-langues
+
 
