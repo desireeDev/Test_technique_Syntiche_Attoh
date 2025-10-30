@@ -1,5 +1,6 @@
 // app/lib/services/sessionService.ts
 import clientPromise from '@/app/lib/mongodb';
+import { calculateTotalScore } from '@/app/utils/scoreCalculator';
 
 /**
  * SERVICE : Logique métier pour la gestion des sessions questionnaire
@@ -20,6 +21,8 @@ export class SessionService {
    * - Mettre à jour si la session existe déjà
    * - Créer si la session n'existe pas
    * 
+   * NOUVEAU : Calcul automatique du score total si non fourni
+   * 
    * @param sessionData - Les données de la session à sauvegarder
    * @param sessionData.sessionId - Identifiant unique de la session
    * @param sessionData.responses - Réponses aux questions (objet clé-valeur)
@@ -27,8 +30,8 @@ export class SessionService {
    * @param sessionData.totalScore - Score total calculé (optionnel)
    * @param sessionData.userId - Identifiant utilisateur (optionnel)
    * 
-   * @returns Promise<{success: boolean, sessionId: string, created: boolean, modified: boolean}>
-   *          Résultat de l'opération avec indicateurs de création/modification
+   * @returns Promise<{success: boolean, sessionId: string, created: boolean, modified: boolean, calculatedScore: number}>
+   *          Résultat de l'opération avec indicateurs de création/modification et score calculé
    */
   async saveSession(sessionData: {
     sessionId: string;
@@ -44,6 +47,17 @@ export class SessionService {
     // Destructuration des données pour plus de clarté
     const { sessionId, responses, progress, totalScore, userId } = sessionData;
 
+    // ====================================================================
+    // 🎯 CALCUL AUTOMATIQUE DU SCORE SI NON FOURNI
+    // ====================================================================
+    const calculatedScore = totalScore !== undefined ? totalScore : calculateTotalScore(responses);
+    
+    console.log(" Score calculé:", {
+      scoreFourni: totalScore,
+      scoreCalcule: calculatedScore,
+      reponses: Object.keys(responses).length
+    });
+
     // Opération MongoDB : updateOne avec upsert=true
     const result = await db.collection('sessions').updateOne(
       // FILTRE : Recherche par sessionId
@@ -53,7 +67,7 @@ export class SessionService {
         $set: {
           responses,           // Réponses aux questions
           progress,            // Progression (étape actuelle, total)
-          totalScore: totalScore || 0, // Score total (0 par défaut)
+          totalScore: calculatedScore, // ⚠️ UTILISE LE SCORE CALCULÉ
           userId: userId || null,      // ID utilisateur (null si anonyme)
           updatedAt: new Date(),       // Horodatage de mise à jour
           
@@ -79,7 +93,8 @@ export class SessionService {
       success: true,                    // Opération réussie
       sessionId,                       // ID de la session traitée
       created: result.upsertedCount > 0, // True si nouvelle création
-      modified: result.modifiedCount > 0 // True si mise à jour
+      modified: result.modifiedCount > 0, // True si mise à jour
+      calculatedScore: calculatedScore  // ⚠️ AJOUT : Score calculé retourné
     };
   }
 
@@ -203,6 +218,63 @@ export class SessionService {
       return sessions;
     } catch (error) {
       console.error('❌ Erreur récupération sessions utilisateur:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Met à jour uniquement le score d'une session existante
+   * 
+   * Utile pour recalculer les scores si la logique de calcul change
+   * 
+   * @param sessionId - Identifiant de la session
+   * @param newScore - Nouveau score à appliquer
+   * @returns Promise<{success: boolean, modified: boolean}>
+   */
+  async updateSessionScore(sessionId: string, newScore: number) {
+    try {
+      const client = await clientPromise;
+      const db = client.db('questionnaire_db');
+      
+      const result = await db.collection('sessions').updateOne(
+        { sessionId },
+        {
+          $set: {
+            totalScore: newScore,
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      return {
+        success: true,
+        modified: result.modifiedCount > 0
+      };
+    } catch (error) {
+      console.error('❌ Erreur mise à jour score:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Supprime une session spécifique
+   * 
+   * @param sessionId - Identifiant de la session à supprimer
+   * @returns Promise<{success: boolean, deleted: boolean}>
+   */
+  async deleteSession(sessionId: string) {
+    try {
+      const client = await clientPromise;
+      const db = client.db('questionnaire_db');
+      
+      const result = await db.collection('sessions').deleteOne({ sessionId });
+
+      return {
+        success: true,
+        deleted: result.deletedCount > 0
+      };
+    } catch (error) {
+      console.error('❌ Erreur suppression session:', error);
       throw error;
     }
   }

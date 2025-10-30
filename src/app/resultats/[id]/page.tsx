@@ -215,7 +215,7 @@ export default function ResultPage() {
     );
   }
 
-  console.log("✅ Rendu: TOUT EST PRÊT", { 
+  console.log(" Rendu: TOUT EST PRÊT", { 
     session: !!session, 
     chartData: !!chartData,
     radarData: chartData.radarData?.length,
@@ -229,8 +229,9 @@ export default function ResultPage() {
   /**
    * Calcule le score total à partir des réponses
    */
-  const totalScore = session.totalScore || Object.values(session.responses).reduce((total: number, r: any) => total + (r.score || 0), 0);
-  const totalQuestions = Object.keys(session.responses).length;
+//  UTILISE directement le score du serveur :
+const totalScore = session.totalScore || 0;
+const totalQuestions = Object.keys(session.responses).length;
 
   /**
    * Extrait le nom de l'utilisateur depuis les réponses
@@ -327,17 +328,24 @@ export default function ResultPage() {
           {/* SCORE GLOBAL */}
           {/* ==================================================================== */}
           <Card className="p-6 mb-6">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">Score Global</h2>
-              <div className="text-5xl font-bold text-primary mb-2">
-                {totalScore} pts
-              </div>
-              <p className="text-muted-foreground">
-                {totalQuestions} questions répondues • Score maximum: {chartData.totalMaxScore} pts
-              </p>
-            </div>
-          </Card>
-
+      <div className="text-center">
+      <h2 className="text-2xl font-bold mb-4">Score Global</h2>
+     <div className="text-5xl font-bold text-primary mb-2">
+      {/* UTILISE session.totalScore AU LIEU DE chartData.totalScore */}
+      {session.totalScore || 0} pts
+     </div>
+     <p className="text-muted-foreground">
+      {totalQuestions} questions répondues • Score maximum: 100 pts
+      {/* SCORE SUR 100 MAINTENANT */}
+     </p>
+    {/* Badge indicatif de la source du score */}
+     <div className="mt-3">
+       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+         Score calculé automatiquement
+       </span>
+     </div>
+   </div>
+   </Card>
           {/* ==================================================================== */}
           {/* SECTION GRAPHIQUES - CORRIGÉE POUR ÉVITER LES ERREURS DE DIMENSIONS */}
           {/* ==================================================================== */}
