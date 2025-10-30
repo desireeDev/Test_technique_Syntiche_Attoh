@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Card } from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button"; // AJOUT
 import { Eye, Calendar, ArrowLeft, Plus } from "lucide-react";
-// Définition du type Session
+
 interface Session {
   _id: string;
   sessionId: string;
@@ -11,7 +12,7 @@ interface Session {
   responses: Record<string, any>;
   totalScore?: number;
 }
-// Composant principal pour afficher tous les résultats
+
 export default function AllResults() {
   const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -31,7 +32,6 @@ export default function AllResults() {
         setLoading(false);
       }
     };
-
     fetchSessions();
   }, []);
 
@@ -48,20 +48,21 @@ export default function AllResults() {
             </p>
           </div>
           <div className="flex gap-3">
-            <button 
+            <Button 
               onClick={() => router.push("/questionnaire")}
-              className="button button-primary flex items-center gap-2"
+              className="flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Nouveau questionnaire
-            </button>
-            <button 
+            </Button>
+            <Button 
+              variant="outline"
               onClick={() => router.push("/")}
-              className="button button-outline flex items-center gap-2"
+              className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
               Accueil
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -73,14 +74,13 @@ export default function AllResults() {
               </div>
               <h3 className="h3 mb-2">Aucune session</h3>
               <p className="text-muted-foreground mb-6">
-                Aucune session  sauvegardée dans la base de données
+                Aucune session sauvegardée dans la base de données
               </p>
-              <button 
+              <Button 
                 onClick={() => router.push("/questionnaire")}
-                className="button button-primary"
               >
                 Créer un questionnaire
-              </button>
+              </Button>
             </div>
           </Card>
         ) : (
@@ -120,13 +120,13 @@ export default function AllResults() {
                         </div>
                       </div>
                     </div>
-                    <button
+                    <Button
                       onClick={() => router.push(`/resultats/${session.sessionId}`)}
-                      className="button button-primary flex items-center gap-2"
+                      className="flex items-center gap-2"
                     >
                       <Eye className="w-4 h-4" />
                       Voir détails
-                    </button>
+                    </Button>
                   </div>
                 </Card>
               </motion.div>

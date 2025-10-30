@@ -3,14 +3,32 @@ import clientPromise from '@/app/lib/mongodb';
 
 /**
  * SERVICE : Logique métier pour la gestion des sessions questionnaire
- * Séparation claire entre logique métier et routes API
+ * 
+ * Ce service encapsule toute la logique d'interaction avec la base de données MongoDB
+ * pour les opérations CRUD sur les sessions de questionnaire.
+ * 
+ * Principes SOLID appliqués :
+ * - Single Responsibility : Gère uniquement les opérations sessions
+ * - Separation of Concerns : Sépare logique métier et couche données
  */
 export class SessionService {
   
   /**
-   * Sauvegarde ou met à jour une session questionnaire
-   * @param sessionData - Données de la session à sauvegarder
-   * @returns Résultat de l'opération MongoDB
+   * Sauvegarde ou met à jour une session questionnaire dans MongoDB
+   * 
+   * Utilise une opération "upsert" (update + insert) pour :
+   * - Mettre à jour si la session existe déjà
+   * - Créer si la session n'existe pas
+   * 
+   * @param sessionData - Les données de la session à sauvegarder
+   * @param sessionData.sessionId - Identifiant unique de la session
+   * @param sessionData.responses - Réponses aux questions (objet clé-valeur)
+   * @param sessionData.progress - État d'avancement du questionnaire
+   * @param sessionData.totalScore - Score total calculé (optionnel)
+   * @param sessionData.userId - Identifiant utilisateur (optionnel)
+   * 
+   * @returns Promise<{success: boolean, sessionId: string, created: boolean, modified: boolean}>
+   *          Résultat de l'opération avec indicateurs de création/modification
    */
   async saveSession(sessionData: {
     sessionId: string;
@@ -19,40 +37,173 @@ export class SessionService {
     totalScore?: number;
     userId?: string;
   }) {
+    // Connexion à la base de données MongoDB
     const client = await clientPromise;
     const db = client.db('questionnaire_db');
     
+    // Destructuration des données pour plus de clarté
     const { sessionId, responses, progress, totalScore, userId } = sessionData;
 
+    // Opération MongoDB : updateOne avec upsert=true
     const result = await db.collection('sessions').updateOne(
+      // FILTRE : Recherche par sessionId
       { sessionId },
       {
+        // OPERATEUR $set : Met à jour les champs existants
         $set: {
-          responses,
-          progress,
-          totalScore: totalScore || 0,
-          userId: userId || null,
-          updatedAt: new Date(),
-          // Marquer comme complété si dernière étape atteinte
+          responses,           // Réponses aux questions
+          progress,            // Progression (étape actuelle, total)
+          totalScore: totalScore || 0, // Score total (0 par défaut)
+          userId: userId || null,      // ID utilisateur (null si anonyme)
+          updatedAt: new Date(),       // Horodatage de mise à jour
+          
+          // Si c'est la dernière étape, marquer comme complété
           ...(progress.currentStep === progress.totalSteps && {
-            isCompleted: true,
-            completedAt: new Date()
+            isCompleted: true,         // Flag de complétion
+            completedAt: new Date()    // Date de fin
           })
         },
+        // OPERATEUR $setOnInsert : Définit les valeurs uniquement à l'insertion
         $setOnInsert: {
-          createdAt: new Date(),
-          startedAt: new Date(),
-          questionnaireId: 'dev-profile-2024'
+          createdAt: new Date(),       // Date de création
+          startedAt: new Date(),       // Date de début
+          questionnaireId: 'dev-profile-2024' // Identifiant du questionnaire
         }
       },
+      // OPTION upsert : Crée le document s'il n'existe pas
       { upsert: true }
     );
 
+    // Retourne un objet de résultat clair
     return {
-      success: true,
-      sessionId,
-      created: result.upsertedCount > 0,
-      modified: result.modifiedCount > 0
+      success: true,                    // Opération réussie
+      sessionId,                       // ID de la session traitée
+      created: result.upsertedCount > 0, // True si nouvelle création
+      modified: result.modifiedCount > 0 // True si mise à jour
     };
+  }
+
+  /**
+   * Récupère une session spécifique par son identifiant unique
+   * 
+   * Utilisé pour afficher les détails d'une session particulière
+   * sur la page de résultats détaillés.
+   * 
+   * @param sessionId - L'identifiant unique de la session à récupérer
+   * @returns Promise<Session | null> - La session trouvée ou null si non trouvée
+   */
+  async getSessionById(sessionId: string) {
+    try {
+      // Connexion à la base de données
+      const client = await clientPromise;
+      const db = client.db('questionnaire_db');
+      
+      // Recherche de la session avec projection pour sélectionner les champs
+      const session = await db.collection('sessions').findOne(
+        // FILTRE : Par sessionId exact
+        { sessionId },
+        {
+          // PROJECTION : Sélectionne uniquement les champs nécessaires
+          projection: {
+            _id: 0,           // Exclut l'ID interne MongoDB (sécurité)
+            sessionId: 1,     // Inclut l'ID métier
+            responses: 1,     // Réponses aux questions
+            progress: 1,      // État de progression
+            totalScore: 1,    // Score total
+            completedAt: 1,   // Date de complétion
+            createdAt: 1,     // Date de création
+            isCompleted: 1    // Flag de complétion
+          }
+        }
+      );
+
+      return session;
+    } catch (error) {
+      // Log détaillé en cas d'erreur (console serveur)
+      console.error('❌ Erreur récupération session:', error);
+      // Propagation de l'erreur pour gestion au niveau supérieur
+      throw error;
+    }
+  }
+
+  /**
+   * Récupère toutes les sessions complétées pour l'historique
+   * 
+   * Retourne les sessions triées par date de complétion décroissante
+   * (les plus récentes en premier). Seules les sessions marquées
+   * comme "complétées" sont retournées.
+   * 
+   * @returns Promise<Array<Session>> - Tableau des sessions complétées
+   */
+  async getAllSessions() {
+    try {
+      const client = await clientPromise;
+      const db = client.db('questionnaire_db');
+      
+      // Requête MongoDB avec filtre, projection et tri
+      const sessions = await db.collection('sessions')
+        .find(
+          // FILTRE : Uniquement les sessions complétées
+          { isCompleted: true },
+          {
+            // PROJECTION : Champs à inclure dans le résultat
+            projection: {
+              _id: 0,           // Exclut l'ID MongoDB
+              sessionId: 1,     // ID de session
+              responses: 1,     // Réponses
+              totalScore: 1,    // Score
+              completedAt: 1,   // Date fin
+              createdAt: 1      // Date création
+            }
+          }
+        )
+        // TRI : Par date de complétion décroissante (récent → ancien)
+        .sort({ completedAt: -1 })
+        // CONVERSION : Curseur MongoDB → Tableau JavaScript
+        .toArray();
+
+      return sessions;
+    } catch (error) {
+      console.error('❌ Erreur récupération sessions:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Récupère les sessions d'un utilisateur spécifique
+   * 
+   * Version filtrée de getAllSessions() pour un utilisateur donné.
+   * Utile pour un système d'authentification multi-utilisateurs.
+   * 
+   * @param userId - Identifiant de l'utilisateur
+   * @returns Promise<Array<Session>> - Sessions de l'utilisateur
+   */
+  async getUserSessions(userId: string) {
+    try {
+      const client = await clientPromise;
+      const db = client.db('questionnaire_db');
+      
+      const sessions = await db.collection('sessions')
+        .find(
+          // FILTRE COMBINÉ : Utilisateur + sessions complétées
+          { userId, isCompleted: true },
+          {
+            projection: {
+              _id: 0,
+              sessionId: 1,
+              responses: 1,
+              totalScore: 1,
+              completedAt: 1
+            }
+          }
+        )
+        .sort({ completedAt: -1 })
+        .toArray();
+
+      return sessions;
+    } catch (error) {
+      console.error('❌ Erreur récupération sessions utilisateur:', error);
+      throw error;
+    }
   }
 }
