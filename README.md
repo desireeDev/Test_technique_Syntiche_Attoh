@@ -172,6 +172,8 @@ Les données de test incluent 6 questions réparties sur 5 étapes avec différe
 
 
 <img width="452" height="911" alt="Structure" src="https://github.com/user-attachments/assets/58410903-e84f-4d4c-99ff-46b1cb0a3e80" />
+
+
 ````
 TEST_TECHNIQUE/
 ├── 🐳 docker-compose.yml          # Orchestration Docker
@@ -186,10 +188,10 @@ TEST_TECHNIQUE/
         ├── 📈 results/           # 🚧 EN DEBUG - Pages des résultats
         ├── 📚 history/           # ✅ FONCTIONNEL - Page historique
         ├── 🛠️ api/               # ✅ FONCTIONNEL - Routes API
-        ├── 🧩 components/         # ✅ FONCTIONNEL - Composants React
+        ├── 🧩 components/         # ✅ FONCTIONNEL - Composants  UI React
         ├── 🎣 hooks/              # ✅ FONCTIONNEL - Hooks personnalisés
         ├── 📚 lib/                # ✅ FONCTIONNEL - Configurations
-        ├── 🔌 services/           # ✅ FONCTIONNEL - Services API
+        ├── 🔌 services/           # ✅ FONCTIONNEL - Services API 
         ├── 📝 types/              # ✅ FONCTIONNEL - Types TypeScript
         └── 🛠️ utils/              # 🔶 PARTIEL - Utilitaires
 
@@ -253,6 +255,7 @@ Tests unitaires - Couverture de tests
 Tableau de bord admin - Analytics avancés
 
 Internationalisation - Support multi-langues
+
 
 
 
