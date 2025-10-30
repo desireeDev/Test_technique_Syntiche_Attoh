@@ -149,20 +149,21 @@ http://localhost:3000
 ## 7. Structure du projet
 
 ```
-my-next-questionnaire/
+test-technique/
 ├─ app/
 │  ├─ api/
 │  ├─ components/
 │  ├─ questionnaire/
 │  └─ results/
 ├─
-├─ 
-├─ styles/
+├
+├
 │  └─ globals.css
 ├─ docker-compose.yml
 ├─ package.json
 └─ README.md
 ```
+
 
 
 
