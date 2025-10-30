@@ -51,7 +51,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 | **📱 Interface responsive** | ✅ Excellent | Mobile-first avec Tailwind CSS, optimisé tous devices |
 | **🎭 Animations fluides** | ✅ Implémenté | Framer Motion pour transitions entre pages et étapes |
 | **💾 Sauvegarde automatique** | ✅ Fonctionnel | Persistance MongoDB, reprise de session possible |
-| **📚 Page d'historique** | ✅ Opérationnel mais problème au niveau des résultats | Visualisation des sessions, comparaison temporelle |
+| **📚 Page d'historique** | ✅ Opérationnel mais problème au niveau des résultats  car les graphes ne s'affichent pas et le score est nul| Visualisation des sessions, comparaison temporelle |
 | **🔄 Barre de progression** | ✅ Interactive | Visuelle, mise à jour temps réel |
 | **✅ Validation des champs** | ✅ Robuste | Client et serveur, messages d'erreur contextuels |
 
@@ -110,6 +110,9 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 <img width="1918" height="993" alt="Prefreee" src="https://github.com/user-attachments/assets/f123f061-4e8a-42b9-995f-478a8c6e4ab7" />
 
 ### Page de résultat - Bug en cours de réglage
+
+<img width="1911" height="991" alt="Rssults" src="https://github.com/user-attachments/assets/f4592cfd-027d-4014-af16-d9bf36d6d2b1" />
+
 
 ### Historique des questionnaires
 
@@ -189,7 +192,7 @@ TEST_TECHNIQUE/
 
 ## 🐛 État du Projet & Solutions
 
-### 🔴 Problème Critique : Affichage des Résultats
+### 🔴 Problème Critique : Affichage des graphes des resultats et mise à jour du score)
 
 **Localisation :** `/src/app/results/page.tsx` et composant `ResultsChart`
 
@@ -240,4 +243,5 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
