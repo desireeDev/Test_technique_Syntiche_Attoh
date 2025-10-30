@@ -1,3 +1,5 @@
+// src/app/lib/utils.ts
+// Utility function to merge class names conditionally
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

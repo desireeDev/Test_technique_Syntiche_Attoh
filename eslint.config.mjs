@@ -9,7 +9,7 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   
-  // Règles personnalisées
+  // Règles personnalisées de typage strict
   {
     rules: {
       // Interdit l'usage de 'any' pour forcer le typage strict
