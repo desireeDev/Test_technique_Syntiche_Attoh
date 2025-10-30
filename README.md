@@ -16,14 +16,14 @@
 
 ## 📋 Table des Matières
 
-- [🌟 Aperçu](#-aperçu)
-- [⚡ Fonctionnalités](#-fonctionnalités)
-- [🛠️ Stack Technique](#️-stack-technique)
-- [📸 Capture d'écran](#-capture-décran)
-- [🚀 Installation Rapide](#-installation-rapide)
-- [📁 Structure du Projet](#-structure-du-projet)
-- [🐛 État du Projet & Solutions](#-état-du-projet--solutions)
-- [🔮 Roadmap](#-roadmap)
+- [🌟 Aperçu](#aperçu)
+- [⚡ Fonctionnalités](#fonctionnalités)
+- [🛠️ Stack Technique](#stack-technique)
+- [📸 Capture d'écran](#capture-décran)
+- [🚀 Installation Rapide](#installation-rapide)
+- [📁 Structure du Projet](#structure-du-projet)
+- [🐛 État du Projet & Solutions](#état-du-projet--solutions)
+- [🔮 Roadmap](#roadmap)
 
 ## 🌟 Aperçu
 
@@ -61,7 +61,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 **Description :** Le composant de graphiques des résultats ne s'affiche pas correctement. Les données sont collectées mais la visualisation graphique rencontre un problème d'affichage.
 
-**Impact :** Les utilisateurs peuvent compléter le questionnaire mais ne voient pas les graphiques finaux,ni la liste la page resutats car elle est introuvable.
+**Impact :** Les utilisateurs peuvent compléter le questionnaire mais ne voient pas les graphiques finaux, ni la liste la page résultats car elle est introuvable.
 
 **Solution en cours :** Modification du fichier Page.tsx dans le dossier results en cours.
 
@@ -92,14 +92,13 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 - **Docker** - Containerisation de l'application
 - **Docker Compose** - Orchestration multi-services
 
-
 ## 📸 Capture d'écran
 
 ### Page d'Accueil
 
 <img width="1880" height="1017" alt="HOMAGE" src="https://github.com/user-attachments/assets/b8ec67ea-1e9d-4b93-8e21-30c90a067a06" />
 
-Déroulé des questionnaires et barre de progression
+### Déroulé des questionnaires et barre de progression
 
 <img width="1867" height="1022" alt="IG" src="https://github.com/user-attachments/assets/5a060e98-6905-4ae1-9788-2a435e5413fb" />
 <img width="1663" height="897" alt="DOS" src="https://github.com/user-attachments/assets/8eaa3453-75e2-43cf-af87-bd2ce23b79dd" />
@@ -110,19 +109,15 @@ Déroulé des questionnaires et barre de progression
 
 <img width="1918" height="993" alt="Prefreee" src="https://github.com/user-attachments/assets/f123f061-4e8a-42b9-995f-478a8c6e4ab7" />
 
-Page de resultat
+### Page de résultat - Bug en cours de réglage
 
-Bug en cours de reglage
-
-Historique des questionnaires
+### Historique des questionnaires
 
 <img width="1901" height="947" alt="HISTORIA" src="https://github.com/user-attachments/assets/5983feb7-b3cd-4b89-80e1-25a4904ca9a7" />
 
-Page de connexion
+### Page de connexion
 
 <img width="1902" height="973" alt="Connexion" src="https://github.com/user-attachments/assets/dfcd7588-aa14-4e82-9126-b55ef71cd968" />
-
-
 
 ## 🚀 Installation Rapide
 
@@ -141,10 +136,11 @@ docker-compose up -d
 
 # 3. Accéder à l'application
 # http://localhost:3000
-````
+```
 
-###🔧 Développement Local
-````
+### 🔧 Développement Local
+
+```bash
 # Installation manuelle
 npm install
 
@@ -152,29 +148,24 @@ npm install
 npm run dev
 
 # Accéder à http://localhost:3000
-````
+```
 
-###🗄️ Configuration MongoDB
-````
-🐳 Configuration Docker Compose
+## 🗄️ Configuration MongoDB
+
+### 🐳 Configuration Docker Compose
+
 Le projet utilise une configuration Docker Compose complète incluant :
-
-MongoDB avec données de test automatiques
-
-Script d'initialisation avec questions d'exemple
-
-Volume persistant pour les données
+- MongoDB avec données de test automatiques
+- Script d'initialisation avec questions d'exemple
+- Volume persistant pour les données
 
 Les données de test incluent 6 questions réparties sur 5 étapes avec différents types de questions (choix multiple, unique, échelle, texte).
-````
 
-###📁 Structure du Projet
-
+## 📁 Structure du Projet
 
 <img width="452" height="911" alt="Structure" src="https://github.com/user-attachments/assets/58410903-e84f-4d4c-99ff-46b1cb0a3e80" />
 
-
-````
+```
 TEST_TECHNIQUE/
 ├── 🐳 docker-compose.yml          # Orchestration Docker
 ├── 🗄️ init-mongodb.js            # Peuplement données de test
@@ -188,76 +179,64 @@ TEST_TECHNIQUE/
         ├── 📈 results/           # 🚧 EN DEBUG - Pages des résultats
         ├── 📚 history/           # ✅ FONCTIONNEL - Page historique
         ├── 🛠️ api/               # ✅ FONCTIONNEL - Routes API
-        ├── 🧩 components/         # ✅ FONCTIONNEL - Composants  UI React
+        ├── 🧩 components/         # ✅ FONCTIONNEL - Composants UI React
         ├── 🎣 hooks/              # ✅ FONCTIONNEL - Hooks personnalisés
         ├── 📚 lib/                # ✅ FONCTIONNEL - Configurations
-        ├── 🔌 services/           # ✅ FONCTIONNEL - Services API 
+        ├── 🔌 services/           # ✅ FONCTIONNEL - Services API
         ├── 📝 types/              # ✅ FONCTIONNEL - Types TypeScript
         └── 🛠️ utils/              # 🔶 PARTIEL - Utilitaires
+```
 
-````
+## 🐛 État du Projet & Solutions
 
-###🐛 État du Projet & Solutions
-````
-🔴 Problème Critique : Affichage des Résultats
-Localisation : /src/app/results/page.tsx et composant ResultsChart
+### 🔴 Problème Critique : Affichage des Résultats
 
-Symptôme :
+**Localisation :** `/src/app/results/page.tsx` et composant `ResultsChart`
 
-Les graphiques Recharts ne s'affichent pas
+**Symptôme :**
+- Les graphiques Recharts ne s'affichent pas
+- Les données sont collectées mais non visualisées
 
-Les données sont collectées mais non visualisées
+**Cause Identifiée :**
+- Flux de données interrompu entre le questionnaire et les résultats
+- Problème de sérialisation des props vers le composant graphique
 
-Cause Identifiée :
-
-Flux de données interrompu entre le questionnaire et les résultats
-
-Problème de sérialisation des props vers le composant graphique
-
-Solution en Cours :
-
-
+**Solution en Cours :**
+```typescript
 // Debug du flux de données et correction du fichier page dans result.
-````
+```
 
-🟡 Autres Problèmes Mineurs à Résoudre
-Dossiers dupliqués : resultats/ et results/
+### 🟡 Autres Problèmes Mineurs à Résoudre
 
-Export PDF non intégré : Utilitaires créés mais non connectés à l'UI
+- **Dossiers dupliqués** : `resultats/` et `results/`
+- **Export PDF non intégré** : Utilitaires créés mais non connectés à l'UI
 
-✅ Parties Complètement Fonctionnelles
+### ✅ Parties Complètement Fonctionnelles
 
-Page d'accueil : Design moderne avec gradients et animations
+- **Page d'accueil** : Design moderne avec gradients et animations
+- **Système de questionnaire** : 5 étapes fluides avec validation
+- **Base de données** : MongoDB opérationnelle avec données de test
+- **API Backend** : Endpoints fonctionnels pour questions et sauvegarde
+- **Responsive design** : Optimisé mobile, tablette, desktop
+- **Performance** : Scores Lighthouse excellents
 
-Système de questionnaire : 5 étapes fluides avec validation
+## 🔮 Roadmap
 
-Base de données : MongoDB opérationnelle avec données de test
+### Version 1.1 (Imminent)
+- [ ] Résolution de l'affichage des résultats - Correction des graphiques
+- [ ] Nettoyage structure - Suppression des dossiers dupliqués
+- [ ] Intégration export PDF - Connexion des utilitaires existants
 
-API Backend : Endpoints fonctionnels pour questions et sauvegarde
+### Version 2.0 (Prochainement)
+- [ ] Mode sombre - Toggle theme
+- [ ] Tests unitaires - Couverture de tests
+- [ ] Tableau de bord admin - Analytics avancés
+- [ ] Internationalisation - Support multi-langues
 
-Responsive design : Optimisé mobile, tablette, desktop
+---
 
-Performance : Scores Lighthouse excellents
+<div align="center">
 
-###🔮 Roadmap
-````
-Version 1.1 (Imminent)
-Résolution de l'affichage des résultats - Correction des graphiques
+**Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
-Nettoyage structure - Suppression des dossiers dupliqués
-
-Intégration export PDF - Connexion des utilitaires existants
-
-Version 2.0 (Prochainement)
-Mode sombre - Toggle theme
-
-Tests unitaires - Couverture de tests
-
-Tableau de bord admin - Analytics avancés
-
-Internationalisation - Support multi-langues
-````
-
-
-
-
+</div>
