@@ -56,7 +56,7 @@ export async function POST(request: Request) {
   }
 }
 
-// AJOUTE CETTE MÉTHODE DANS LE MÊME FICHIER
+
 
 /**
  * GET /api/responses
@@ -103,7 +103,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ session });
 
     } else {
-      // 📋 MODE "TOUTES LES SESSIONS" - Récupération de l'historique complet
+      //  MODE "TOUTES LES SESSIONS" - Récupération de l'historique complet
       const sessions = await sessionService.getAllSessions();
       
       // Retourne toujours un tableau, même vide
@@ -118,7 +118,7 @@ export async function GET(request: Request) {
     return NextResponse.json(
       { 
         error: 'Erreur serveur lors de la récupération',
-        // En développement, on inclut plus de détails pour le debug
+        
         ...(process.env.NODE_ENV === 'development' && {
           details: error instanceof Error ? error.message : 'Erreur inconnue'
         })
