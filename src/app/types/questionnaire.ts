@@ -1,7 +1,8 @@
+//Déclaration des types en TypeScript
 export type QuestionType = "radio" | "checkbox" | "text" | "textarea";
 
 export interface QuestionOption {
-  id?: string;           // facultatif si tu n'en as pas besoin
+  id?: string;           // facultatif 
   label: string;         // texte affiché
   value: string;         // valeur interne
   score?: number;        // optionnel pour scoring
@@ -33,7 +34,7 @@ export interface Step {
   description?: string;      // description optionnelle
   questions: Question[];
 }
-
+//////
 export interface QuestionnaireResponse {
   [questionId: string]: string | string[];  // réponses de l'utilisateur
 }
@@ -44,7 +45,7 @@ export interface QuestionnaireResult {
   responses: QuestionnaireResponse;  // réponses de l'utilisateur
   completedAt: Date;                 // date de complétion
 }
-//inetrfarce User typée
+//interface User typée
 export interface User {
   id: string;
   email: string;
