@@ -134,7 +134,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 ```bash
 # 1. Cloner le repository
-git clone <votre-repo>
+git clone <https://github.com/desireeDev/Test_technique_Syntiche_Attoh.git>
 cd TEST_TECHNIQUE
 
 # 2. Lancer l'application complète
@@ -229,6 +229,7 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
 
 
