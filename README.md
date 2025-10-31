@@ -63,7 +63,7 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 **Impact :** Les utilisateurs voient les graphiques mais avec des données non représentatives de leurs réponses.
 
-**Solution en cours :** Correction des algorithmes de calcul dans le fichier chartData.ts pour générer des scores réalistes basés sur les réponses du questionnaire.
+**Solution en cours :** Correction des algorithmes de calcul dans le fichier route.ts du dossier response et responseService du dossier service pour générer des scores réalistes basés sur les réponses du questionnaire.
 
 ### ⭐ Fonctionnalités Bonus
 
@@ -229,6 +229,7 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
 
 
