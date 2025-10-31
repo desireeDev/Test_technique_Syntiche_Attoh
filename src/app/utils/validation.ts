@@ -4,7 +4,7 @@
 import { Question, QuestionnaireResponse } from "@/app/types/questionnaire";
 
 
-// 🔍 Fonction : validateQuestion
+// Fonction : validateQuestion
 // ------------------------------------------------------------
 // Objectif : vérifier si une réponse donnée est valide
 // en fonction des contraintes de la question (obligatoire, longueur, nombre de sélections, etc.)
@@ -19,7 +19,7 @@ export const validateQuestion = (
   // Si aucune valeur n’a été fournie pour une question obligatoire → invalide
   if (!value) return false;
   
-  // ✅ CAS 1 : la réponse est un tableau (par ex. cases à cocher)
+  // CAS 1 : la réponse est un tableau (par ex. cases à cocher)
   if (Array.isArray(value)) {
     // Tableau vide → invalide
     if (value.length === 0) return false;
@@ -31,7 +31,7 @@ export const validateQuestion = (
     return true;
   }
   
-  // ✅ CAS 2 : la réponse est une chaîne (par ex. champ texte ou choix unique)
+  //  CAS 2 : la réponse est une chaîne (par ex. champ texte ou choix unique)
   if (typeof value === 'string') {
     // Chaîne vide ou uniquement des espaces → invalide
     if (value.trim() === "") return false;
@@ -48,7 +48,7 @@ export const validateQuestion = (
 };
 
 
-// 🔍 Fonction : validateStep
+// Fonction : validateStep
 // ------------------------------------------------------------
 // Objectif : vérifier si TOUTES les questions d’une étape sont valides
 // en fonction des réponses et des conditions d’affichage.
@@ -60,7 +60,7 @@ export const validateStep = (
   // every() → renvoie true uniquement si TOUTES les questions sont valides
   return questions.every((question) => {
 
-    // ⚙️ Gestion des questions conditionnelles
+    //  Gestion des questions conditionnelles
     if (question.conditionalOn) {
       // Récupère la valeur de la question dont dépend celle-ci
       const conditionalValue = responses[question.conditionalOn.questionId];
@@ -85,7 +85,7 @@ export const validateStep = (
 };
 
 
-// 🔍 Fonction : shouldShowQuestion
+//  Fonction : shouldShowQuestion
 // ------------------------------------------------------------
 // Objectif : déterminer si une question doit être affichée ou non
 // en fonction d’une autre réponse conditionnelle.
