@@ -7,8 +7,8 @@ import { QuestionService } from '@/app/services/question/questionService';
  * Endpoint pour récupérer le questionnaire actif
  * 
  * Bonnes pratiques implémentées :
- * ✅ Séparation logique métier (QuestionService)
- * ✅ Gestion d'erreurs appropriée (404 vs 500)
+ *  Séparation logique métier (QuestionService)
+ *  Gestion d'erreurs appropriée (404 vs 500)
  */
 export async function GET() {
   try {
