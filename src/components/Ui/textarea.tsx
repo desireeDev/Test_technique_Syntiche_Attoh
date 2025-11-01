@@ -1,7 +1,9 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Composant : Textarea
+// ------------------------------------------------------------
+// Objectif : afficher une zone de texte stylisée
 const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
   ({ className, ...props }, ref) => {
     return (

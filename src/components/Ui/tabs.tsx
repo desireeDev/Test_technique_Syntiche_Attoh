@@ -2,7 +2,7 @@
 // Composant Tabs réutilisable
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-
+// Utilitaire pour combiner des classes CSS
 import { cn } from "@/app/(backend)/lib/utils";
 
 const Tabs = TabsPrimitive.Root;

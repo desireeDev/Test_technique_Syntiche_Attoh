@@ -1,12 +1,14 @@
 "use client";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Composant : ProgressBar
+// ------------------------------------------------------------
+// Objectif : afficher une barre de progression avec pourcentage et étapes
 interface ProgressBarProps {
   current: number;
   total: number;
   className?: string;
 }
-
+// Rendu du composant ProgressBar
 export const ProgressBar = ({ current, total, className }: ProgressBarProps) => {
   const percentage = (current / total) * 100;
 

@@ -1,7 +1,9 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Composant : Input
+// ------------------------------------------------------------
+// Objectif : afficher un champ de saisie stylisé
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, ...props }, ref) => (
     <input

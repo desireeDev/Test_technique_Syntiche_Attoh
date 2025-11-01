@@ -2,20 +2,22 @@
 import { RadioGroup, RadioGroupItem } from "@/components/Ui/radio-group";
 import { Label } from "@/components/Ui/label";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Définition des types pour les options et les props du composant
 interface Option {
   id?: string;
   label: string;
   value: string;
 }
-
+// Props attendues par le composant RadioGroupCard
 interface RadioGroupCardProps {
   options: Option[];
   value: string;
   onChange: (value: string) => void;
   className?: string;
 }
-
+// Composant : RadioGroupCard
+// ------------------------------------------------------------
+// Objectif : afficher un groupe de boutons radio sous forme de cartes sélectionnables
 export const RadioGroupCard = ({
   options,
   value,

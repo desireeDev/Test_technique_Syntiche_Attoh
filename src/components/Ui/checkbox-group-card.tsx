@@ -2,20 +2,22 @@
 import { Checkbox } from "@/components/Ui/checkbox";
 import { Label } from "@/components/Ui/label";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Définition des types pour les options et les props du composant  
 interface Option {
   id?: string;
   label: string;
   value: string;
 }
-
+// Props attendues par le composant CheckboxGroupCard
 interface CheckboxGroupCardProps {
   options: Option[];
   values: string[];
   onChange: (values: string[]) => void;
   className?: string;
 }
-
+// Composant : CheckboxGroupCard
+// ------------------------------------------------------------
+// Objectif : afficher un groupe de cases à cocher sous forme de cartes sélectionnables
 export const CheckboxGroupCard = ({
   options,
   values,
@@ -26,7 +28,7 @@ export const CheckboxGroupCard = ({
     if (checked) onChange([...values, optionValue]);
     else onChange(values.filter((v) => v !== optionValue));
   };
-
+// Rendu du composant
   return (
     <div className={cn("checkbox-group", className)}>
       {options.map((option) => {

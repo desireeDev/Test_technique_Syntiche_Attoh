@@ -3,7 +3,9 @@ import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Circle } from "lucide-react";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Composant : RadioGroup
+// ------------------------------------------------------------
+// Objectif : afficher un groupe de boutons radio stylisés
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
@@ -11,7 +13,9 @@ const RadioGroup = React.forwardRef<
   <RadioGroupPrimitive.Root ref={ref} className={cn("radio-group", className)} {...props} />
 ));
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
-
+// Composant : RadioGroupItem
+// ------------------------------------------------------------
+// Objectif : afficher un bouton radio stylisé
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>

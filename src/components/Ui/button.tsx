@@ -3,7 +3,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Définition des variantes de styles pour le composant Button
 const buttonVariants = cva("button", {
   variants: {
     variant: {
@@ -26,13 +26,13 @@ const buttonVariants = cva("button", {
     size: "default",
   },
 });
-
+// Définition des props attendues par le composant Button
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
-
+// Composant : Button
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";

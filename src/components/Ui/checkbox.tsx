@@ -3,7 +3,9 @@ import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 import { cn } from "@/app/(backend)/lib/utils";
-
+// Composant : Checkbox
+// ------------------------------------------------------------
+// Objectif : afficher une case à cocher stylisée
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
