@@ -1,71 +1,66 @@
-"use client";
-import * as React from "react";
-import { cn } from "@/app/lib/utils";
+// components/ui/card.jsx
+"use client"; // Indique que ce composant s'exécute côté client (dans le navigateur)
 
-/**
- * Card - Utilise vos classes CSS globales
- */
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("card", className)} // Utilise la classe CSS globale "card"
-      {...props}
-    />
-  )
+import { cn } from "@/app/(backend)/lib/utils"; // Importe la fonction utilitaire pour gérer les classes CSS
+
+
+
+// Composant Card principal - conteneur de base
+export const Card = ({ className, ...props }) => (
+  <div 
+    className={cn("card", className)} // Combine la classe "card" avec les classes personnalisées
+    {...props} // Passe toutes les autres propriétés (id, onClick, etc.)
+  />
 );
-Card.displayName = "Card";
 
-/**
- * CardHeader
- */
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-  ),
+// En-tête de la carte
+export const CardHeader = ({ className, ...props }) => (
+  <div 
+    className={cn(
+      "flex flex-col space-y-1.5 p-6", // Layout flex en colonne avec espacement et padding
+      className
+    )} 
+    {...props} 
+  />
 );
-CardHeader.displayName = "CardHeader";
 
-/**
- * CardTitle - Utilise vos classes de titre globales
- */
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("h3 font-semibold leading-none tracking-tight", className)} // Utilise h3 du CSS global
-      {...props}
-    />
-  ),
+// Titre de la carte
+export const CardTitle = ({ className, ...props }) => (
+  <h3 
+    className={cn(
+      "h3 font-semibold leading-none tracking-tight", // Style de titre h3 avec police semi-gras
+      className
+    )} 
+    {...props} 
+  />
 );
-CardTitle.displayName = "CardTitle";
 
-/**
- * CardDescription
- */
-const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
-  ),
+// Description/texte secondaire de la carte
+export const CardDescription = ({ className, ...props }) => (
+  <p 
+    className={cn(
+      "text-sm text-muted-foreground", // Texte petit avec couleur atténuée
+      className
+    )} 
+    {...props} 
+  />
 );
-CardDescription.displayName = "CardDescription";
 
-/**
- * CardContent
- */
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />,
+// Contenu principal de la carte
+export const CardContent = ({ className, ...props }) => (
+  <div 
+    className={cn("p-6 pt-0", className)} // Padding avec padding-top à 0
+    {...props} 
+  />
 );
-CardContent.displayName = "CardContent";
 
-/**
- * CardFooter
- */
-const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
-  ),
+// Pied de carte (pour les actions/boutons)
+export const CardFooter = ({ className, ...props }) => (
+  <div 
+    className={cn(
+      "flex items-center p-6 pt-0", // Layout flex centré avec padding
+      className
+    )} 
+    {...props} 
+  />
 );
-CardFooter.displayName = "CardFooter";
-
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
