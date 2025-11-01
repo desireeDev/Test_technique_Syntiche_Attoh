@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion"; 
 
 // Composants UI
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import { Card } from "@/app/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
+import { Button } from "@/components/Ui/button";
+import { Input } from "@/components/Ui/input";
+import { Label } from "@/components/Ui/label";
+import { Card } from "@/components/Ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Ui/tabs";
 
 // Icônes
 import { Code2 } from "lucide-react";

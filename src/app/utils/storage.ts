@@ -1,8 +1,8 @@
-import { QuestionnaireResponse, QuestionnaireResult } from "@/app/types/questionnaire";
+import { QuestionnaireResponse, QuestionnaireResult } from "@/types/questionnaire";
 
 const STORAGE_KEY = "questionnaire_responses";
 const HISTORY_KEY = "questionnaire_history";
-
+//Fonction pour sauvegarder les reponses
 export const saveResponses = (responses: QuestionnaireResponse): void => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
@@ -10,7 +10,7 @@ export const saveResponses = (responses: QuestionnaireResponse): void => {
     console.error("Failed to save responses:", error);
   }
 };
-
+//Fonction pour load les reponses
 export const loadResponses = (): QuestionnaireResponse => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -20,7 +20,7 @@ export const loadResponses = (): QuestionnaireResponse => {
     return {};
   }
 };
-
+//Fonction pour delete
 export const clearResponses = (): void => {
   try {
     localStorage.removeItem(STORAGE_KEY);
@@ -49,12 +49,4 @@ export const getHistory = (): QuestionnaireResult[] => {
   }
 };
 
-export const getHistoryItem = (id: string): QuestionnaireResult | null => {
-  try {
-    const history = getHistory();
-    return history.find((item) => item.id === id) || null;
-  } catch (error) {
-    console.error("Failed to get history item:", error);
-    return null;
-  }
-};
+

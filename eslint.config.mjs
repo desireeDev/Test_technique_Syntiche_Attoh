@@ -13,8 +13,11 @@ export default defineConfig([
   {
     rules: {
       // Interdit l'usage de 'any' pour forcer le typage strict
-      "@typescript-eslint/no-explicit-any": "error",
       
+       "@typescript-eslint/no-explicit-any": "error",
+      
+      // Exige des types explicites pour les fonctions
+      "@typescript-eslint/explicit-function-return-type": "error",
       // Autres règles recommandées
       "@typescript-eslint/no-unused-vars": "error",
       "prefer-const": "error",

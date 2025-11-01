@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Card } from "@/app/components/ui/card";
-import { Button } from "@/app/components/ui/button"; // AJOUT
+import { Card } from "@/components/Ui/card";
+import { Button } from "@/components/Ui/button"; // AJOUT
 import { Eye, Calendar, ArrowLeft, Plus } from "lucide-react";
 
 interface Session {

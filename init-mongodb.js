@@ -1,9 +1,9 @@
 // Script d'initialisation MongoDB pour le test technique React
 // Ce script peuple la base de données avec le questionnaire prêt à l'emploi
 
-const { MongoClient } = require('mongodb');
-const fs = require('fs');
-const path = require('path');
+import { MongoClient } from 'mongodb';
+import fs from 'fs';
+import path from 'path';
 
 // Configuration
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';

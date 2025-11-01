@@ -1,10 +1,10 @@
 // Importation des types utilisés :
 // - Question : représente la structure d’une question (texte, type, validation, etc.)
 // - QuestionnaireResponse : représente les réponses données par l’utilisateur
-import { Question, QuestionnaireResponse } from "@/app/types/questionnaire";
+import { Question, QuestionnaireResponse } from "@/types/questionnaire";
 
 
-// 🔍 Fonction : validateQuestion
+//  Fonction : validateQuestion
 // ------------------------------------------------------------
 // Objectif : vérifier si une réponse donnée est valide
 // en fonction des contraintes de la question (obligatoire, longueur, nombre de sélections, etc.)
@@ -19,7 +19,7 @@ export const validateQuestion = (
   // Si aucune valeur n’a été fournie pour une question obligatoire → invalide
   if (!value) return false;
   
-  // ✅ CAS 1 : la réponse est un tableau (par ex. cases à cocher)
+  //  CAS 1 : la réponse est un tableau (par ex. cases à cocher)
   if (Array.isArray(value)) {
     // Tableau vide → invalide
     if (value.length === 0) return false;

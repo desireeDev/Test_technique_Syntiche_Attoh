@@ -4,19 +4,19 @@ import { useState, useEffect } from "react"; // Hooks React pour gérer l'état 
 import { useRouter } from "next/navigation"; // Hook Next.js pour la navigation entre pages
 import { motion, AnimatePresence } from "framer-motion"; // Bibliothèque d'animations
 import { ArrowLeft, ArrowRight, Check } from "lucide-react"; // Icônes SVG
-import { toast } from "sonner"; // Système de notifications (toasts)
+
 
 // Import des composants UI réutilisables
-import { Button } from "@/app/components/ui/button";
-import { Card } from "@/app/components/ui/card";
-import { Input } from "@/app/components/ui/input";
-import { Textarea } from "@/app/components/ui/textarea";
-import { ProgressBar } from "@/app/components/ui/progress-bar";
-import { RadioGroupCard } from "@/app/components/ui/radio-group-card";
-import { CheckboxGroupCard } from "@/app/components/ui/checkbox-group-card";
+import { Button } from "@/components/Ui/button";
+import { Card } from "@/components/Ui/card";
+import { Input } from "@/components/Ui/input";
+import { Textarea } from "@/components/Ui/textarea";
+import { ProgressBar } from "@/components/Ui/progress-bar";
+import { RadioGroupCard } from "@/components/Ui/radio-group-card";
+import { CheckboxGroupCard } from "@/components/Ui/checkbox-group-card";
 
 // Import des types TypeScript pour une meilleure sécurité et auto-complétion
-import { Question, Step, QuestionnaireResponse } from "@/app/types/questionnaire";
+import {  Step, QuestionnaireResponse } from "@/types/questionnaire";
 
 // Import des fonctions utilitaires pour la gestion des données
 import { saveResponses, loadResponses, clearResponses, saveToHistory } from "@/app/utils/storage";
@@ -151,8 +151,6 @@ export default function Questionnaire() {
       // Vérification de la réponse serveur
       if (!res.ok) throw new Error("Erreur lors de l'envoi des réponses");
       
-      // Traitement de la réponse
-      const result = await res.json();
       
       // Sauvegarde dans l'historique local
       saveToHistory({
@@ -185,7 +183,7 @@ export default function Questionnaire() {
    * @param questionId - ID de la question
    * @param value - Valeur de la réponse (string ou string[])
    */
-  const updateResponse = (questionId: string, value: string | string[]) => {
+  const updateResponse = (questionId: string, value: string | string[]): void => {
     setResponses(prev => ({ ...prev, [questionId]: value }));
   };
 
@@ -195,9 +193,9 @@ export default function Questionnaire() {
    * Variants pour les animations de transition entre étapes
    */
   const slideVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 1000 : -1000, opacity: 0 }), // Entrée
+    enter: (d: number): { x: number; opacity: number } => ({ x: d > 0 ? 1000 : -1000, opacity: 0 }), // Entrée
     center: { zIndex: 1, x: 0, opacity: 1 }, // Position centrale
-    exit: (d: number) => ({ zIndex: 0, x: d < 0 ? 1000 : -1000, opacity: 0 }), // Sortie
+    exit: (d: number): { zIndex: number; x: number; opacity: number } => ({ zIndex: 0, x: d < 0 ? 1000 : -1000, opacity: 0 }), // Sortie
   };
 
   // ========== RENDU DU COMPOSANT ==========

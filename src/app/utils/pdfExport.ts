@@ -2,7 +2,7 @@
 import jsPDF from "jspdf";
 
 // Importation du type QuestionnaireResponse (structure des réponses)
-import { QuestionnaireResponse } from "@/app/types/questionnaire";
+import { QuestionnaireResponse } from "@/types/questionnaire";
 
 // Fonction exportée qui génère et télécharge un PDF à partir des réponses d'un questionnaire
 export const exportToPDF = (responses: QuestionnaireResponse): void => {

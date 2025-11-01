@@ -1,11 +1,10 @@
 "use client";
-
+//Layout Racine
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/app/components/ui/toaster";
-import { Toaster as Sonner } from "@/app/components/ui/sonner";
-import { TooltipProvider } from "@/app/components/ui/tooltip";
-import "./globals.css";
+
+import { TooltipProvider } from "@/components/Ui/tooltip";
+import "../styles/index.css";
 
 const queryClient = new QueryClient();
 
@@ -15,10 +14,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="h-full min-h-screen bg-gradient-to-br from-primary to-secondary text-foreground font-sans">
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
-            {/* Toasters */}
-            <Toaster />
-            <Sonner />
-
             {/* Wrapper principal */}
             <main className="flex flex-col min-h-screen p-8 gap-8">
               
