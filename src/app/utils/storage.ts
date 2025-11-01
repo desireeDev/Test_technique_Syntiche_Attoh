@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-import { QuestionnaireResponse, QuestionnaireResult } from "@/types/questionnaire";
 
-const STORAGE_KEY = "questionnaire_responses";
-const HISTORY_KEY = "questionnaire_history";
+
 //Fonction pour sauvegarder les reponses
-=======
+
 //  On importe les types utilisés pour typer les données du questionnaire
 // - QuestionnaireResponse : les réponses données par l'utilisateur
 // - QuestionnaireResult : le résultat final d'un questionnaire
@@ -18,7 +15,7 @@ const HISTORY_KEY = "questionnaire_history";   // pour l’historique des ancien
  *  saveResponses()
  * Enregistre les réponses actuelles de l'utilisateur dans le localStorage
  */
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+
 export const saveResponses = (responses: QuestionnaireResponse): void => {
   try {
     // On convertit les réponses en JSON (format texte) et on les sauvegarde
@@ -27,15 +24,13 @@ export const saveResponses = (responses: QuestionnaireResponse): void => {
     console.error("❌ Erreur lors de l'enregistrement des réponses :", error);
   }
 };
-<<<<<<< HEAD
-//Fonction pour load les reponses
-=======
+
 
 /**
  *  loadResponses()
  * Récupère les réponses sauvegardées depuis le localStorage
  */
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+
 export const loadResponses = (): QuestionnaireResponse => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -46,15 +41,13 @@ export const loadResponses = (): QuestionnaireResponse => {
     return {};
   }
 };
-<<<<<<< HEAD
-//Fonction pour delete
-=======
+
 
 /**
  * clearResponses()
  * Supprime les réponses enregistrées du localStorage
  */
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+
 export const clearResponses = (): void => {
   try {
     localStorage.removeItem(STORAGE_KEY);
@@ -92,9 +85,7 @@ export const getHistory = (): QuestionnaireResult[] => {
   }
 };
 
-<<<<<<< HEAD
 
-=======
 /**
  *  getHistoryItem()
  * Récupère un seul résultat d’historique grâce à son id
@@ -109,4 +100,4 @@ export const getHistoryItem = (id: string): QuestionnaireResult | null => {
     return null;
   }
 };
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+

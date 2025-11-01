@@ -4,11 +4,9 @@
 import { Question, QuestionnaireResponse } from "@/types/questionnaire";
 
 
-<<<<<<< HEAD
-//  Fonction : validateQuestion
-=======
+
 // Fonction : validateQuestion
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+
 // ------------------------------------------------------------
 // Objectif : vérifier si une réponse donnée est valide
 // en fonction des contraintes de la question (obligatoire, longueur, nombre de sélections, etc.)
@@ -23,11 +21,9 @@ export const validateQuestion = (
   // Si aucune valeur n’a été fournie pour une question obligatoire → invalide
   if (!value) return false;
   
-<<<<<<< HEAD
-  //  CAS 1 : la réponse est un tableau (par ex. cases à cocher)
-=======
+
   // CAS 1 : la réponse est un tableau (par ex. cases à cocher)
->>>>>>> c1d8100897f7ab14b9337c15c5797d88fc008318
+
   if (Array.isArray(value)) {
     // Tableau vide → invalide
     if (value.length === 0) return false;
