@@ -96,7 +96,8 @@ DevProfile transforme l'auto-évaluation des développeurs en une expérience en
 
 ### Page d'Accueil
 
-<img width="1880" height="1017" alt="HOMAGE" src="https://github.com/user-attachments/assets/b8ec67ea-1e9d-4b93-8e21-30c90a067a06" />
+<img width="1912" height="1097" alt="Login" src="https://github.com/user-attachments/assets/558134a7-8f9c-4750-b10e-5d5d5ee9e715" />
+
 
 ### Déroulé des questionnaires et barre de progression
 
@@ -182,7 +183,7 @@ TEST_TECHNIQUE/
         ├── 🏠 page.tsx            # Page d'accueil (Design moderne)
         ├── layout.tsx             # Layout racine
         ├── 📊 questionnaire/      # ✅ FONCTIONNEL - Pages du questionnaire
-        ├── 📈 results/           # 🚧 EN DEBUG - Pages des résultats
+        ├── 📈 results/           # EN DEBUG - Pages des résultats
         ├── 📚 history/           # ✅ FONCTIONNEL - Page historique
         ├── 🛠️ api/               # ✅ FONCTIONNEL - Routes API
         ├── 🧩 components/         # ✅ FONCTIONNEL - Composants UI React
@@ -229,6 +230,7 @@ TEST_TECHNIQUE/
 **Application fonctionnelle avec un problème technique en cours de résolution sur la page des résultats**
 
 </div>
+
 
 
 
