@@ -1,6 +1,6 @@
 "use client";
 //Layout Racine
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { TooltipProvider } from "@/components/Ui/tooltip";
@@ -8,7 +8,7 @@ import "../styles/index.css";
 
 const queryClient = new QueryClient();
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
   return (
     <html lang="fr" className="h-full">
       <body className="h-full min-h-screen bg-gradient-to-br from-primary to-secondary text-foreground font-sans">

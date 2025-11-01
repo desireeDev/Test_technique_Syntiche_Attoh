@@ -99,7 +99,7 @@ export class ScoreCalculatorService {
     }
 
     // ====================================================================
-    // QUESTION 8 : Bases de données - VERSION ROBUSTE
+    // QUESTION 8 : Bases de données 
     // ====================================================================
     const q8Answer = this.extractAnswer(responses.q8, true);
     if (q8Answer && q8Answer.length > 0) {
@@ -113,7 +113,7 @@ export class ScoreCalculatorService {
     }
 
     // ====================================================================
-    // QUESTION 10 : Outils DevOps - VERSION ROBUSTE
+    // QUESTION 10 : Outils DevOps 
     // ====================================================================
     const q10Answer = this.extractAnswer(responses.q10, true);
     if (q10Answer && q10Answer.length > 0) {
@@ -127,7 +127,7 @@ export class ScoreCalculatorService {
     }
 
     // ====================================================================
-    // QUESTION 14 : Type de projet - VERSION ROBUSTE
+    // QUESTION 14 : Type de projet
     // ====================================================================
     const q14Answer = this.extractAnswer(responses.q14);
     if (q14Answer) {
@@ -151,18 +151,7 @@ export class ScoreCalculatorService {
     const completionBonus = this.getCompletionBonus(answeredQuestions);
     const finalScore = Math.min(normalizedScore + completionBonus, 100);
 
-    // ====================================================================
-    // RAPPORT FINAL DÉTAILLÉ
-    // ====================================================================
-    console.log("📊 === RAPPORT FINAL CALCUL SCORE ===");
-    console.log("📈 Score brut cumulé:", totalScore);
-    console.log("🎯 Score maximum possible:", maxPossibleScore);
-    console.log("📊 Score normalisé:", normalizedScore);
-    console.log("🎁 Bonus complétion:", completionBonus);
-    console.log("🏆 Score final:", finalScore);
-    console.log("❓ Questions répondues:", answeredQuestions);
-    console.log("📋 Questions analysées:", Object.keys(responses).length);
-    
+  
     // ALERTE SI SCORE = 0
     if (finalScore === 0) {
       console.error("🚨 CRITIQUE: Score final = 0!");
@@ -171,13 +160,13 @@ export class ScoreCalculatorService {
       console.error("   Vérifiez la structure des réponses ci-dessus");
     }
     
-    console.log("✅ === CALCUL TERMINÉ ===\n");
+    console.log(" === CALCUL TERMINÉ ===\n");
 
     return finalScore;
   }
 
   // ====================================================================
-  // NOUVELLE MÉTHODE : EXTRACTION ROBUSTE DES RÉPONSES
+  // NOUVELLE MÉTHODE : EXTRACTION DES RÉPONSES
   // ====================================================================
 
   /**

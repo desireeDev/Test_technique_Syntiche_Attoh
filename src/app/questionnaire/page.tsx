@@ -21,6 +21,7 @@ import {  Step, QuestionnaireResponse } from "@/types/questionnaire";
 // Import des fonctions utilitaires pour la gestion des données
 import { saveResponses, loadResponses, clearResponses, saveToHistory } from "@/app/utils/storage";
 import { validateStep, shouldShowQuestion } from "@/app/utils/validation";
+import { toast } from "sonner";
 
 /**
  * COMPOSANT PRINCIPAL DU QUESTIONNAIRE
